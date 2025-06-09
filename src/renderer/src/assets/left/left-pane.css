@@ -1,0 +1,42 @@
+.Pane1 {
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+}
+
+.left-pane {
+    --top-height: 50px;
+
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    height: 100%;
+}
+
+.left-top {
+    height: var(--top-height);
+}
+
+.content {
+    flex: 1;
+    width: 100%;
+    height: calc(100% -  var(--top-height));
+}
+
+.content .folder-tree {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+}
+
+.content .folder-tree .item {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+}
+.content .folder-tree .item div { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+
+.content .folder-tree .item .nm { flex: 0 0 auto; width: 100%;}
+

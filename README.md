@@ -32,3 +32,9 @@ $ npm run build:mac
 # For Linux
 $ npm run build:linux
 ```
+
+```
+npm i @rexxars/react-split-pane
+npm install react-window
+npm install react-window react-virtualized-auto-sizer
+```
