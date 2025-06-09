@@ -51,7 +51,36 @@ npm i @rexxars/react-split-pane
 npm install react-window
 npm install react-window react-virtualized-auto-sizer
 ```
+## napi-folder
+package.json
 
+```json
+{
+  "dependencies": {
+    "napi-bindings": "file:/./napi-folder/bindings"
+  }
+}
+```
+src/preload/index.ts
+```ts
+import type { Folder, OptParams, TextContent, HomeType, DiskInfo } from 'napi-bindings'
+const isDev = process.env.NODE_ENV === 'development'
+
+console.log(`isDev: ${isDev}`)
+const nativePath = isDev
+  ? path.join(__dirname, '../../napi-folder')
+  : path.join(process.resourcesPath, 'napi-folder')
+
+// eslint-disable-next-line @typescript-eslint/no-require-imports
+const { FolderApi } = require(nativePath)
+
+```
+
+```sh
+cd napi-folder
+cargo test
+cargo build --release --platform
+```
 
 ## deploy
 
