@@ -11,7 +11,7 @@ function MainPane(): React.JSX.Element {
     <div className="main-pane">
       <SplitPane
         split="vertical"
-        primary="second"
+        // primary="second"
         minSize={0}
         defaultSize={200}
         onDragStarted={() => setIsResizing(true)}

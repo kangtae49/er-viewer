@@ -2,7 +2,10 @@ import React from 'react'
 import FolderList from '@renderer/components/right/contents/FolderList'
 import GalleryList from '@renderer/components/right/contents/GalleryList'
 import { useSelectedTreeItemStore } from '@renderer/store/selectedTreeItemStore'
-import { DirectoryViewType, useDirectoryViewTypeStore } from '@renderer/store/directoryViewTypeStore'
+import {
+  DirectoryViewType,
+  useDirectoryViewTypeStore
+} from '@renderer/store/directoryViewTypeStore'
 import FileView from '@renderer/components/right/contents/FileView'
 
 type ContentType = 'FileText' | DirectoryViewType

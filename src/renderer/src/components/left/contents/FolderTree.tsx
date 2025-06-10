@@ -9,7 +9,7 @@ import { useSelectedTreeItemStore } from '@renderer/store/selectedTreeItemStore'
 
 const optParams: OptParams = {
   cache_nm: 'folder-tree',
-  meta_types: ['Ext', 'Mt'],
+  meta_types: ['Ext', 'Mt', 'Sz'],
   ordering: [
     { nm: 'Dir', asc: 'Asc' },
     { nm: 'Nm', asc: 'Asc' }

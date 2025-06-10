@@ -25,13 +25,7 @@
     padding: 0 0 0 3px;
 }
 
-.content .folder-tree {
-    /*display: flex;*/
-    /*flex-direction: column;*/
-    /*width: 100%;*/
-    /*height: 100%;*/
-    /*overflow: auto;*/
-}
+.content .folder-tree {}
 
 .content .folder-tree .item {
     display: flex;
