@@ -20,7 +20,7 @@ export type HomePathMap = Record<HomeType, string>
 export interface FolderAPI {
   getCurPath: () => Promise<string>
   readFolder: (params: OptParams) => Promise<Folder>
-  readText: (pathStr: string) => Promise<TextContent>
+  readTextFile: (pathStr: string) => Promise<TextContent>
   setState: <T>(key: string, val: T) => Promise<T>
   getState: <T>(key: string, default_val: object | undefined) => Promise<T>
   getHomeDir: () => Promise<HomePathMap>
@@ -35,7 +35,7 @@ const api: FolderAPI = {
   readFolder: async (params: OptParams): Promise<Folder> => {
     return new FolderApi().readFolder(JSON.stringify(params)).then(JSON.parse)
   },
-  readText: async (pathStr: string): Promise<TextContent> => {
+  readTextFile: async (pathStr: string): Promise<TextContent> => {
     return new FolderApi().readText(pathStr).then(JSON.parse)
   },
   setState: async <T>(key: string, val: T): Promise<T> => {

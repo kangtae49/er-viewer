@@ -6,7 +6,7 @@ export function getNthOfTreeItems(
   nth: number,
   curIdx = 0
 ): [TreeItem | undefined, number] {
-  let findTreeItem: TreeItem | undefined
+  let findTreeItem: TreeItem | undefined = undefined
   if (!treeItems) {
     return [findTreeItem, curIdx]
   }

@@ -13,7 +13,8 @@ function createWindow(): void {
     ...(process.platform === 'linux' ? { icon } : {}),
     webPreferences: {
       preload: join(__dirname, '../preload/index.js'),
-      sandbox: false
+      sandbox: false,
+      webSecurity: false
     }
   })
 
@@ -33,6 +34,21 @@ function createWindow(): void {
   } else {
     mainWindow.loadFile(join(__dirname, '../renderer/index.html'))
   }
+
+  mainWindow.webContents.on('will-navigate', (event, url) => {
+    const url_str = url.toString()
+    if (url_str === mainWindow.webContents.getURL()) {
+      return
+    }
+    if (url_str.startsWith('http')) {
+      event.preventDefault()
+      const child = new BrowserWindow({
+        width: 800,
+        height: 600
+      })
+      child.loadURL(url)
+    }
+  })
 }
 
 // This method will be called when Electron has finished

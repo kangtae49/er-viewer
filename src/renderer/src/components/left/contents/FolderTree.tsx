@@ -20,8 +20,11 @@ export type FolderTree = TreeItem[]
 export type TreeItem = {
   parent?: TreeItem
   nm: string
-  dir: boolean
   full_path: string
+  dir?: boolean
+  ext?: string
+  mt?: string
+  sz?: number
   items?: TreeItem[]
   selected?: boolean
 }
@@ -43,9 +46,13 @@ const fromItem = (item: Item, parentTreeItem: TreeItem): TreeItem => {
   const treeItem: TreeItem = {
     nm: item.nm.replaceAll(SEP, ''),
     full_path: fullPath,
-    dir: item.dir,
     parent: parentTreeItem.parent
   }
+  if (item.dir) treeItem.dir = item.dir
+  if (item.ext) treeItem.ext = item.ext
+  if (item.mt) treeItem.mt = item.mt
+  if (item.sz) treeItem.sz = Number(item.sz)
+
   if (parentTreeItem) {
     treeItem.parent = parentTreeItem
   }
