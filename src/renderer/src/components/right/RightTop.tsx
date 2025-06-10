@@ -1,5 +1,4 @@
-
-function RightTop ():  React.ReactElement {
+function RightTop(): React.ReactElement {
 
   return (
     <div className="right-top">

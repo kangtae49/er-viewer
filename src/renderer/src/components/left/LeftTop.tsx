@@ -1,4 +1,4 @@
-function LeftTop ():  React.ReactElement {
+function LeftTop(): React.ReactElement {
 
   return (
     <div className="left-top">

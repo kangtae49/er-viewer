@@ -42,11 +42,14 @@
   "dependencies": {
     "@electron-toolkit/preload": "^3.0.1",
     "@electron-toolkit/utils": "^4.0.0",
+    "@fortawesome/fontawesome-svg-core": "^6.7.2",
+    "@fortawesome/free-solid-svg-icons": "^6.7.2",
+    "@fortawesome/react-fontawesome": "^0.2.2",
     "@rexxars/react-split-pane": "^1.0.0",
     "electron-updater": "^6.3.9",
+    "napi-bindings": "file:/./napi-folder/bindings",
     "react-virtualized-auto-sizer": "^1.0.26",
-    "react-window": "^1.8.11",
-    "napi-bindings": "file:/./napi-folder/bindings"
+    "react-window": "^1.8.11"
   },
   "devDependencies": {
     "@electron-toolkit/eslint-config-prettier": "^3.0.0",

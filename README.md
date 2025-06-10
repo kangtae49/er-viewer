@@ -113,3 +113,10 @@ er-viewer/package.json
 ```sh
 npm build build:win
 ```
+
+## fontawesome
+```
+npm install @fortawesome/react-fontawesome
+npm install @fortawesome/fontawesome-svg-core
+npm install @fortawesome/free-solid-svg-icons
+```

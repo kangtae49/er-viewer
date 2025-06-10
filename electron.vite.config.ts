@@ -13,8 +13,8 @@ export default defineConfig({
     resolve: {
       alias: {
         '@renderer': resolve('src/renderer/src'),
-        '@assets': resolve('src/renderer/src/assets'),
-        '@napi-bindings': resolve('napi-folder/bindings')
+        '@assets': resolve('src/renderer/src/assets') //,
+        // '@napi-bindings': resolve('napi-folder/bindings')
       }
     },
     plugins: [react()]

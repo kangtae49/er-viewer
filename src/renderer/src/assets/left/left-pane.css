@@ -24,19 +24,20 @@
 }
 
 .content .folder-tree {
-    display: flex;
-    flex-direction: column;
-    width: 100%;
-    height: 100%;
-    overflow: auto;
+    /*display: flex;*/
+    /*flex-direction: column;*/
+    /*width: 100%;*/
+    /*height: 100%;*/
+    /*overflow: auto;*/
 }
 
 .content .folder-tree .item {
     display: flex;
-    flex-direction: column;
+    flex-direction: row;
     width: 100%;
 }
-.content .folder-tree .item div { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-
-.content .folder-tree .item .nm { flex: 0 0 auto; width: 100%;}
-
+.content .folder-tree .item>div { overflow: hidden; text-overflow: ellipsis; white-space: nowrap;  }
+.content .folder-tree .item .depth { cursor: pointer; }
+.content .folder-tree .item .ico { flex: 0 0 18px; cursor: pointer;}
+.content .folder-tree .item .nm { flex: 0 0 auto; width: calc(100% - 18px);}
+.content .folder-tree .item .nm .label {display: inline-block; cursor: pointer; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;}
