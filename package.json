@@ -49,7 +49,8 @@
     "electron-updater": "^6.3.9",
     "napi-bindings": "file:/./napi-folder/bindings",
     "react-virtualized-auto-sizer": "^1.0.26",
-    "react-window": "^1.8.11"
+    "react-window": "^1.8.11",
+    "zustand": "^5.0.5"
   },
   "devDependencies": {
     "@electron-toolkit/eslint-config-prettier": "^3.0.0",

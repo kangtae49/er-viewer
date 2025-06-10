@@ -2,41 +2,41 @@ import { TreeItem } from './left/contents/FolderTree'
 
 export const SEP = '\\'
 export function getNthOfTreeItems(
-  items: TreeItem[] | null,
+  treeItems: TreeItem[] | undefined,
   nth: number,
   curIdx = 0
-): [TreeItem | null, number] {
-  let item: TreeItem | null = null
-  if (items == null) {
-    return [item, curIdx]
+): [TreeItem | undefined, number] {
+  let findTreeItem: TreeItem | undefined
+  if (!treeItems) {
+    return [findTreeItem, curIdx]
   }
-  for (let idxItem = 0; idxItem < items.length; idxItem++) {
+  for (let idxItem = 0; idxItem < treeItems.length; idxItem++) {
     curIdx++
     if (curIdx - 1 == nth) {
-      item = items[idxItem]
+      findTreeItem = treeItems[idxItem]
       break
     }
-    const [findItem, nextIdx] = getNthOfTreeItems(items[idxItem].items, nth, curIdx)
-    item = findItem
+    const [findItem, nextIdx] = getNthOfTreeItems(treeItems[idxItem]?.items, nth, curIdx)
+    findTreeItem = findItem
     curIdx = nextIdx
-    if (item != null) {
+    if (findTreeItem) {
       break
     }
   }
-  return [item, curIdx]
+  return [findTreeItem, curIdx]
 }
 
-export function getCountOfTreeItems(items: TreeItem[] | null): number {
-  if (items == null) {
+export function getCountOfTreeItems(treeItems: TreeItem[] | undefined): number {
+  if (!treeItems) {
     return 0
   }
-  let count = items.length
-  for (let idxItem = 0; idxItem < items.length; idxItem++) {
-    const item = items[idxItem]
-    if (item.items == null) {
+  let count = treeItems.length
+  for (let idxItem = 0; idxItem < treeItems.length; idxItem++) {
+    const treeItem = treeItems[idxItem]
+    if (!treeItem.items) {
       continue
     }
-    count += getCountOfTreeItems(item.items)
+    count += getCountOfTreeItems(treeItem.items)
   }
   return count
 }
