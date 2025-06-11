@@ -1,7 +1,7 @@
-import { TreeItem } from './FolderTree'
+import { TreeItem } from '@renderer/types'
 import { FontAwesomeIcon as Icon } from '@fortawesome/react-fontawesome'
 import { faFolder, faFile } from '@fortawesome/free-solid-svg-icons'
-import { SEP } from '@renderer/components/utils'
+import { SEP } from '@renderer/components/left/contents/tree'
 import React from 'react'
 
 type Prop = {

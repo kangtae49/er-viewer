@@ -61,7 +61,7 @@ package.json
   }
 }
 ```
-src/preload/index.ts
+src/preload/types.d.ts
 ```ts
 import type { Folder, OptParams, TextContent, HomeType, DiskInfo } from 'napi-bindings'
 const isDev = process.env.NODE_ENV === 'development'

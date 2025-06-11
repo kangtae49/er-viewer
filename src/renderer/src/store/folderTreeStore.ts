@@ -1,14 +1,14 @@
 import { create } from 'zustand'
-import { TreeItem } from '@renderer/components/left/contents/FolderTree'
+import type { FolderTree } from '@renderer/types'
 
 interface FolderTreeStore {
-  folderTree?: TreeItem[]
-  setFolderTree: (folderTree?: TreeItem[]) => void
+  folderTree?: FolderTree
+  setFolderTree: (folderTree?: FolderTree) => void
 }
 
 export const useFolderTreeStore = create<FolderTreeStore>((set) => ({
   folderTree: undefined,
-  setFolderTree: (folderTree?: TreeItem[]) =>
+  setFolderTree: (folderTree?: FolderTree) =>
     set(() => ({
       folderTree: folderTree
     }))

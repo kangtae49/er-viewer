@@ -19,7 +19,6 @@ function RightContent(): React.ReactNode {
   } else if (selectedItem?.dir) {
     contentType = directoryViewTypeStore
   }
-
   return (
     <div className="content">
       {(() => {

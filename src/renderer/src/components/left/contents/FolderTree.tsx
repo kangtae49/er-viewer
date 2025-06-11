@@ -1,63 +1,16 @@
 import FolderTreeItem from '@renderer/components/left/contents/FolderTreeItem'
-import { DiskInfo, Item, OptParams } from 'napi-bindings'
 import React, { useEffect } from 'react'
 import AutoSizer from 'react-virtualized-auto-sizer'
 import { FixedSizeList as List } from 'react-window'
-import { getNthOfTreeItems, getCountOfTreeItems, SEP } from '@renderer/components/utils'
 import { useFolderTreeStore } from '@renderer/store/folderTreeStore'
 import { useSelectedTreeItemStore } from '@renderer/store/selectedTreeItemStore'
-
-const optParams: OptParams = {
-  cache_nm: 'folder-tree',
-  meta_types: ['Ext', 'Mt', 'Sz'],
-  ordering: [
-    { nm: 'Dir', asc: 'Asc' },
-    { nm: 'Nm', asc: 'Asc' }
-  ]
-}
-
-export type FolderTree = TreeItem[]
-export type TreeItem = {
-  parent?: TreeItem
-  nm: string
-  full_path: string
-  dir?: boolean
-  ext?: string
-  mt?: string
-  sz?: number
-  items?: TreeItem[]
-  selected?: boolean
-}
-
-const fromDisk = (disk: DiskInfo): TreeItem => {
-  return {
-    nm: disk.path.replaceAll(SEP, ''),
-    full_path: disk.path,
-    dir: true
-  }
-}
-
-// const fromItem = (item: Item, basePath: string): TreeItem => {
-const fromItem = (item: Item, parentTreeItem: TreeItem): TreeItem => {
-  const basePath = parentTreeItem.full_path
-  const fullPath = basePath.endsWith(`:${SEP}`)
-    ? [basePath.replaceAll(SEP, ''), item.nm].join(SEP)
-    : [basePath, item.nm].join(SEP)
-  const treeItem: TreeItem = {
-    nm: item.nm.replaceAll(SEP, ''),
-    full_path: fullPath,
-    parent: parentTreeItem.parent
-  }
-  if (item.dir) treeItem.dir = item.dir
-  if (item.ext) treeItem.ext = item.ext
-  if (item.mt) treeItem.mt = item.mt
-  if (item.sz) treeItem.sz = Number(item.sz)
-
-  if (parentTreeItem) {
-    treeItem.parent = parentTreeItem
-  }
-  return treeItem
-}
+import type { FolderTree, TreeItem } from '@renderer/types'
+import {
+  fetchDisks,
+  fetchTreeItems,
+  getNthOfTreeItems,
+  getCountOfTreeItems
+} from '@renderer/components/left/contents/tree'
 
 function FolderTree(): React.ReactElement {
   const folderTree = useFolderTreeStore((state) => state.folderTree)
@@ -65,18 +18,12 @@ function FolderTree(): React.ReactElement {
   const selectedItem = useSelectedTreeItemStore((state) => state.selectedItem)
   const setSelectedItem = useSelectedTreeItemStore((state) => state.setSelectedItem)
 
-  // const [selectedItem, setSelectedItem] = useState<TreeItem | undefined>(undefined)
   const clickIcon = async (treeItem?: TreeItem): Promise<void> => {
+    console.log('click', treeItem)
     if (folderTree && treeItem?.dir) {
       if (!treeItem.items) {
-        const folder = await window.api.readFolder({ ...optParams, path_str: treeItem.full_path })
-        console.log('folder: ', folder)
-        const folderItems = folder?.item?.items
-        if (folderItems) {
-          treeItem.items = folderItems.map((folderItem) => {
-            return fromItem(folderItem, treeItem)
-          })
-        } else {
+        const treeItems = await fetchTreeItems(treeItem)
+        if (!treeItems) {
           delete treeItem.items
         }
       } else {
@@ -105,21 +52,10 @@ function FolderTree(): React.ReactElement {
   const itemSize = 18
 
   useEffect(() => {
-    window.api.getDisks().then((disks: DiskInfo[]) => {
-      setFolderTree(disks.map(fromDisk))
+    fetchDisks().then((folderTree: FolderTree | undefined) => {
+      setFolderTree(folderTree)
     })
   }, [setFolderTree])
-  // console.log('getNthOfTreeItems: ', getNthOfTreeItems(items, 0))
-  // const sample: TreeItem[] = [
-  //   {nm: '', dir: true, full_path: '', items: [
-  //       {nm: '', dir: true, full_path: '', items: []},
-  //       {nm: '', dir: true, full_path: '', items: []},
-  //       {nm: '', dir: true, full_path: '', items: []},]},
-  //   {nm: '', dir: true, full_path: '', items: []},
-  // ]
-  // console.log('getCountOfTreeItems: ', getCountOfTreeItems(sample))
-  // console.log('count: ', getCountOfTreeItems(treeItems) || 0)
-  // console.log('treeItems', treeItems)
   return (
     <AutoSizer>
       {({ height, width }) => (

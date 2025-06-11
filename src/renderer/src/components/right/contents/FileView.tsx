@@ -113,17 +113,22 @@ function ViewText({ selectedItem }: FileViewProps): React.ReactElement {
 }
 
 function ViewAudio({ selectedItem }: FileViewProps): React.ReactElement {
+  console.log('view-audio')
   const mediaRef = useRef<HTMLAudioElement>(null)
 
   useEffect(() => {
     if (mediaRef.current) {
-      mediaRef.current.volume = 0.5
+      mediaRef.current.volume = 0.3
+      mediaRef.current?.load()
     }
   })
   return (
     <div className="view-audio">
       <audio ref={mediaRef} controls={true} autoPlay={true}>
-        <source src={selectedItem?.full_path} type={selectedItem?.mt} />
+        <source
+          src={selectedItem?.full_path}
+          type={selectedItem?.mt}
+        />
       </audio>
     </div>
   )
@@ -135,6 +140,7 @@ function ViewVideo({ selectedItem }: FileViewProps): React.ReactElement {
   useEffect(() => {
     if (mediaRef.current) {
       mediaRef.current.volume = 0.5
+      mediaRef.current?.load()
     }
   })
   return (

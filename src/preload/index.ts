@@ -2,12 +2,12 @@ import { contextBridge, ipcRenderer } from 'electron'
 import { electronAPI } from '@electron-toolkit/preload'
 
 import path from 'node:path'
-
 import type { Folder, OptParams, TextContent, HomeType, DiskInfo } from 'napi-bindings'
+// import type {} from ''
 
 const isDev = process.env.NODE_ENV === 'development'
-
 console.log(`isDev: ${isDev}`)
+
 const nativePath = isDev
   ? path.join(__dirname, '../../napi-folder')
   : path.join(process.resourcesPath, 'napi-folder')
