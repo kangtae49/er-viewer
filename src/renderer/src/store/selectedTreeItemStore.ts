@@ -1,7 +1,7 @@
 import { create } from 'zustand'
 import { TreeItem } from '@renderer/types'
 
-interface SelectedTreeItemStore {
+export interface SelectedTreeItemStore {
   selectedItem?: TreeItem
   setSelectedItem: (treeItem?: TreeItem) => void
 }

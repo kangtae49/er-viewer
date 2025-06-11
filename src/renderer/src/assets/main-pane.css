@@ -16,3 +16,5 @@ html, body, #root {
 .fa-folder-plus:hover { transform: scale(1.2); color: #bd623c; }
 .fa-file { color: #2a9d8f; margin-right: 5px;}
 .fa-file-code { color: #2a9d8f; margin-right: 5px;}
+.fa-arrow-up {color: #f4a261; margin-right: 5px;}
+.fa-globe {color: #f4a261; margin-right: 5px;}

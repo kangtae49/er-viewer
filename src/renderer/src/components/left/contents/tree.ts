@@ -1,6 +1,12 @@
 import { FolderTree, TreeItem } from '@renderer/types'
 import { DiskInfo, Item, OptParams } from 'napi-bindings'
+import { FolderTreeStore } from '@renderer/store/folderTreeStore'
+import { FolderTreeRefStore } from '@renderer/store/folderTreeRefStore'
+import { SelectedTreeItemStore } from '@renderer/store/selectedTreeItemStore'
+
 export const SEP = '\\'
+export const TREE_ITEM_SIZE = 18
+export const TREE_DEPT_SIZE = 13
 
 const treeParams: OptParams = {
   cache_nm: 'folder-tree',
@@ -118,15 +124,12 @@ export const fetchFolderTree = async (
   let parentTree = folderTree
   let selectedItem: TreeItem | undefined
   let curIdx = 0
-  console.log(paths)
   for (let i = 0; i < paths.length; i++) {
-    const path = paths.slice(0, i + 1).join(SEP)
-    console.log(path)
+    // const path = paths.slice(0, i + 1).join(SEP)
     const findItem = parentTree.find((treeItem) => treeItem.nm === paths[i])
     if (!findItem) {
       break
     }
-    console.log('find:', findItem)
     selectedItem = findItem
     curIdx += parentTree.indexOf(findItem)
     if (i == paths.length - 1) {
@@ -141,6 +144,37 @@ export const fetchFolderTree = async (
     }
     curIdx++
   }
-  console.log(curIdx)
   return [folderTree, selectedItem, curIdx]
+}
+
+export const renderPath = async (
+  fullPath: string,
+  stores: {
+    setFolderTree: FolderTreeStore['setFolderTree']
+    folderTreeRef: FolderTreeRefStore['folderTreeRef']
+    setSelectedItem: SelectedTreeItemStore['setSelectedItem']
+    selectedItem: SelectedTreeItemStore['selectedItem']
+  }
+): Promise<void> => {
+  console.log('renderPath', fullPath)
+  const { setFolderTree, folderTreeRef, setSelectedItem, selectedItem } = stores
+  if (fullPath == '/') {
+    fetchDisks().then((disks) => {
+      setFolderTree(disks)
+    })
+  } else {
+    fetchFolderTree(fullPath).then(([newFolderTree, newSelectedItem, newSelectedIndex]) => {
+      setFolderTree([...newFolderTree])
+      selectTreeItem(selectedItem, newSelectedItem)
+      setSelectedItem(newSelectedItem)
+      const totalCount = getCountOfTreeItems(newFolderTree)
+      if (document.querySelector('.folder-tree')?.scrollHeight == totalCount * TREE_ITEM_SIZE) {
+        folderTreeRef?.current?.scrollToItem(newSelectedIndex, 'center')
+      } else {
+        setTimeout(() => {
+          folderTreeRef?.current?.scrollToItem(newSelectedIndex, 'center')
+        }, 100)
+      }
+    })
+  }
 }

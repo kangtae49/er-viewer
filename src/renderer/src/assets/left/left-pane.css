@@ -39,6 +39,6 @@
 .content .folder-tree .item .nm .label {display: inline-block; cursor: pointer; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;}
 
 
-.left-top { display: flex; gap: 5px; width: 100%; margin:0; padding: 0; background-color: white;}
+.left-top { display: flex; gap: 5px; width: 100%; margin:0; padding: 0 0 0 3px; background-color: white;}
 .left-top .link { padding: 2px; color: #f4a261; cursor: pointer;}
 .left-top .link:hover { background-color: #bad0e4; }

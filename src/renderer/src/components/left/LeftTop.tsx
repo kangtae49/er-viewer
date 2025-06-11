@@ -14,11 +14,7 @@ import type { HomePathMap } from '@renderer/types'
 import { useFolderTreeStore } from '@renderer/store/folderTreeStore'
 import { useFolderTreeRefStore } from '@renderer/store/folderTreeRefStore'
 import { useSelectedTreeItemStore } from '@renderer/store/selectedTreeItemStore'
-import {
-  fetchDisks,
-  fetchFolderTree, getCountOfTreeItems,
-  selectTreeItem
-} from '@renderer/components/left/contents/tree'
+import { renderPath } from '@renderer/components/left/contents/tree'
 
 function LeftTop(): React.ReactElement {
   const setFolderTree = useFolderTreeStore((state) => state.setFolderTree)
@@ -45,33 +41,13 @@ function LeftTop(): React.ReactElement {
     RuntimeDir: '',
     TemplateDir: ''
   })
-  const clickHomeDir = (url: string): void => {
-    if (url == '/') {
-      fetchDisks().then((disks) => {
-        setFolderTree(disks)
-      })
-    } else {
-      fetchFolderTree(url).then(([newFolderTree, newSelectedItem, newSelectedIndex]) => {
-        console.log(url, newFolderTree, newSelectedItem, newSelectedIndex)
-        setFolderTree([...newFolderTree])
-        selectTreeItem(selectedItem, newSelectedItem)
-        setSelectedItem(newSelectedItem)
-        console.log('clickHomeDir', newSelectedItem)
-        const totalCount = getCountOfTreeItems(newFolderTree)
-        if (document.querySelector('.folder-tree')?.scrollHeight == totalCount * 18) {
-          folderTreeRef?.current?.scrollToItem(newSelectedIndex, 'center')
-        } else {
-          setTimeout(() => {
-            folderTreeRef?.current?.scrollToItem(newSelectedIndex, 'center')
-          }, 500)
-        }
-        // document.querySelector('.folder-tree')?.scrollTo({
-        //   top: newSelectedIndex * 18,
-        //   behavior: 'smooth'
-        // })
-      })
-    }
-    console.log(url)
+  const clickHomeDir = async (fullPath: string): Promise<void> => {
+    await renderPath(fullPath, {
+      setFolderTree,
+      folderTreeRef,
+      setSelectedItem,
+      selectedItem
+    })
   }
 
   useEffect(() => {

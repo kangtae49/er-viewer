@@ -1,7 +1,7 @@
 import { create } from 'zustand'
 import type { FolderTree } from '@renderer/types'
 
-interface FolderTreeStore {
+export interface FolderTreeStore {
   folderTree?: FolderTree
   setFolderTree: (folderTree?: FolderTree) => void
 }

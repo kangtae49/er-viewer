@@ -1,8 +1,8 @@
+import React from 'react'
 import { TreeItem } from '@renderer/types'
 import { FontAwesomeIcon as Icon } from '@fortawesome/react-fontawesome'
 import { faFolder, faFile } from '@fortawesome/free-solid-svg-icons'
-import { SEP } from '@renderer/components/left/contents/tree'
-import React from 'react'
+import { SEP, TREE_DEPT_SIZE } from '@renderer/components/left/contents/tree'
 
 type Prop = {
   style: React.CSSProperties
@@ -19,11 +19,10 @@ function FolderTreeItem({ treeItem, style, clickIcon, clickLabel }: Prop): React
   const pathList = arr.slice(0, -1).map((_nm, idx) => {
     return arr.slice(0, idx + 1).join(SEP)
   })
-  const depthWidth = 13
   const iconWidth = 18
-  const nm_minus = depthWidth * pathList.length + iconWidth
+  const nm_minus = TREE_DEPT_SIZE * pathList.length + iconWidth
   const depth_style = {
-    flex: `0 0 ${depthWidth}px`,
+    flex: `0 0 ${TREE_DEPT_SIZE}px`,
     display: 'flex',
     justifyContent: 'center'
   }

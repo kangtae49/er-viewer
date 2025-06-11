@@ -3,7 +3,7 @@ import { RefObject } from 'react'
 import { FixedSizeList as List } from 'react-window'
 
 type FolderTreeRef = RefObject<List | null> | null
-interface FolderTreeRefStore {
+export interface FolderTreeRefStore {
   folderTreeRef: FolderTreeRef
   setFolderTreeRef: (folderTreeRef: FolderTreeRef) => void
 }

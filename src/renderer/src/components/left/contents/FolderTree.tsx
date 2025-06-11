@@ -6,12 +6,12 @@ import { useFolderTreeStore } from '@renderer/store/folderTreeStore'
 import { useFolderTreeRefStore } from '@renderer/store/folderTreeRefStore'
 import { useSelectedTreeItemStore } from '@renderer/store/selectedTreeItemStore'
 import type { FolderTree, TreeItem } from '@renderer/types'
-import { selectTreeItem } from '@renderer/components/left/contents/tree'
+import { selectTreeItem, TREE_ITEM_SIZE } from '@renderer/components/left/contents/tree'
 import {
   fetchDisks,
   fetchTreeItems,
   getNthOfTreeItems,
-  getCountOfTreeItems
+  getCountOfTreeItems,
 } from '@renderer/components/left/contents/tree'
 
 function FolderTree(): React.ReactElement {
@@ -42,21 +42,7 @@ function FolderTree(): React.ReactElement {
     selectTreeItem(selectedItem, newTreeItem)
     setSelectedItem(newTreeItem)
     // console.log('clickLabel - end:', newTreeItem)
-    // selectTreeItem(treeItem)
   }
-
-  // const selectTreeItem = (treeItem?: TreeItem): void => {
-  //   if (!treeItem) {
-  //     return
-  //   }
-  //   if (selectedItem) {
-  //     delete selectedItem.selected
-  //   }
-  //   treeItem.selected = true
-  //   setSelectedItem(treeItem)
-  // }
-
-  const itemSize = 18
 
   useEffect(() => {
     setFolderTreeRef(listRef)
@@ -71,12 +57,12 @@ function FolderTree(): React.ReactElement {
           className="folder-tree"
           height={height}
           itemCount={getCountOfTreeItems(folderTree) || 0}
-          itemSize={itemSize}
+          itemSize={TREE_ITEM_SIZE}
           width={width}
           ref={listRef}
-          onItemsRendered={({ visibleStartIndex, visibleStopIndex }) => {
-            console.log('onItemsRendered: ', visibleStartIndex, visibleStopIndex)
-          }}
+          // onItemsRendered={({ visibleStartIndex, visibleStopIndex }) => {
+          //   console.log('onItemsRendered: ', visibleStartIndex, visibleStopIndex)
+          // }}
         >
           {({ index, style }) => {
             const treeItem = getNthOfTreeItems(folderTree, index)[0]
