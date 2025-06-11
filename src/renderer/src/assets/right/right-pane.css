@@ -45,7 +45,7 @@
 .content .folder-list .item .ext { flex: 1 1 30px; min-width: 0; }
 .content .folder-list .item .tm { flex: 1 1 150px; min-width: 0; }
 
-
+.content .shadow-dom { width: 100%; height: 100%; overflow: auto; }
 .content .view-text { white-space: pre-wrap; width: 100%; height: 100%; overflow: auto; }
 .content .view-html { width: 100%; height: 100%; overflow: auto; }
 .content .view-img { display: flex; justify-content: center; align-items: center; width:100%; height:100%; }

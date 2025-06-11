@@ -1,5 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react'
 import { TreeItem } from '@renderer/types'
+import { ShadowDomWrapper } from '@renderer/components/right/contents/ShadowDomWrapper'
 
 interface FileViewProps {
   selectedItem?: TreeItem | undefined
@@ -85,7 +86,11 @@ function ViewHtml({ selectedItem }: FileViewProps): React.ReactElement {
     fetchText().then((txt) => setHtml(txt))
   }, [selectedItem?.full_path])
 
-  return <div className="view-html" dangerouslySetInnerHTML={{ __html: html }}></div>
+  return (
+    <ShadowDomWrapper>
+      <div className="view-html" dangerouslySetInnerHTML={{ __html: html }}></div>
+    </ShadowDomWrapper>
+  )
 }
 function ViewIframe({ selectedItem }: FileViewProps): React.ReactElement {
   return (
