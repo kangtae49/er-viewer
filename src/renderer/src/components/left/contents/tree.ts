@@ -11,6 +11,18 @@ const treeParams: OptParams = {
   ]
 }
 
+export const selectTreeItem = (
+  selectedItem: TreeItem | undefined,
+  newItem: TreeItem | undefined
+): void => {
+  if (selectedItem) {
+    delete selectedItem?.selected
+  }
+  if (newItem) {
+    newItem.selected = true
+  }
+}
+
 const fromDisk = (disk: DiskInfo): TreeItem => {
   return {
     nm: disk.path.replaceAll(SEP, ''),
@@ -100,11 +112,12 @@ export const fetchTreeItems = async (treeItem: TreeItem): Promise<TreeItem[] | u
 
 export const fetchFolderTree = async (
   full_path: string
-): Promise<[TreeItem[], TreeItem | undefined]> => {
+): Promise<[TreeItem[], TreeItem | undefined, number]> => {
   const paths = full_path.split(SEP).filter((path) => path != '')
   const folderTree = await fetchDisks()
   let parentTree = folderTree
   let selectedItem: TreeItem | undefined
+  let curIdx = 0
   console.log(paths)
   for (let i = 0; i < paths.length; i++) {
     const path = paths.slice(0, i + 1).join(SEP)
@@ -115,6 +128,7 @@ export const fetchFolderTree = async (
     }
     console.log('find:', findItem)
     selectedItem = findItem
+    curIdx += parentTree.indexOf(findItem)
     if (i == paths.length - 1) {
       break
     }
@@ -125,6 +139,8 @@ export const fetchFolderTree = async (
     } else {
       break
     }
+    curIdx++
   }
-  return [folderTree, selectedItem]
+  console.log(curIdx)
+  return [folderTree, selectedItem, curIdx]
 }

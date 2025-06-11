@@ -1,7 +1,5 @@
 import type { HomeType } from 'napi-bindings'
 
-
-
 export type HomePathMap = Record<HomeType, string>
 export type FolderTree = TreeItem[]
 export type TreeItem = {

@@ -22,7 +22,6 @@ function MainPane(): React.JSX.Element {
           {isResizing && <div className="iframe-overlay" />}
           <RightPane />
         </div>
-
       </SplitPane>
     </div>
   )

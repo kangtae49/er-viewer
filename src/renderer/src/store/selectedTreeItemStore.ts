@@ -1,5 +1,5 @@
 import { create } from 'zustand'
-import { TreeItem } from '@renderer/components/left/contents/FolderTree'
+import { TreeItem } from '@renderer/types'
 
 interface SelectedTreeItemStore {
   selectedItem?: TreeItem
