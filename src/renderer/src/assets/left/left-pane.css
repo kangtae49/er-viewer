@@ -41,4 +41,4 @@
 
 .left-top { display: flex; gap: 5px; width: 100%; margin:0; padding: 0 0 0 3px; background-color: white;}
 .left-top .link { padding: 2px; color: #f4a261; cursor: pointer;}
-.left-top .link:hover { background-color: #bad0e4; }
+.left-top .link:hover { transform: scale(1.2); color: #bd623c;}

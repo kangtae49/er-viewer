@@ -1,7 +1,7 @@
 import React from 'react'
 import { FontAwesomeIcon as Icon } from '@fortawesome/react-fontawesome'
 import { faFolder, faArrowUp, faGlobe } from '@fortawesome/free-solid-svg-icons'
-import { renderPath, SEP } from '@renderer/components/left/contents/tree'
+import { renderTreeFromPath, SEP } from '@renderer/components/left/contents/tree'
 import { useSelectedTreeItemStore } from '@renderer/store/selectedTreeItemStore'
 import { useFolderTreeStore } from '@renderer/store/folderTreeStore'
 import { useFolderTreeRefStore } from '@renderer/store/folderTreeRefStore'
@@ -11,13 +11,15 @@ function RightTop(): React.ReactElement {
   const folderTreeRef = useFolderTreeRefStore((state) => state.folderTreeRef)
   const setSelectedItem = useSelectedTreeItemStore((state) => state.setSelectedItem)
   const selectedItem = useSelectedTreeItemStore((state) => state.selectedItem)
-  const clickPath = async (fullPath: string): Promise<void> => {
-    await renderPath(fullPath, {
-      setFolderTree,
-      folderTreeRef,
-      setSelectedItem,
-      selectedItem
-    })
+  const clickPath = async (fullPath: string | undefined): Promise<void> => {
+    if (fullPath) {
+      await renderTreeFromPath(fullPath, {
+        setFolderTree,
+        folderTreeRef,
+        setSelectedItem,
+        selectedItem
+      })
+    }
   }
   let pathList: string[] = []
   let fullPathList: string[] = []
@@ -35,7 +37,16 @@ function RightTop(): React.ReactElement {
   return (
     <div className="right-top">
       <div className="title-path">
-        <div>
+        <div className="icon">
+          <Icon icon={faArrowUp} onClick={() => clickPath(selectedItem?.parent?.full_path)} />
+        </div>
+        <div className="icon">
+          <Icon icon={faGlobe} onClick={() => window.api.shellOpenPath(selectedItem?.full_path)} />
+        </div>
+        <div
+          className="icon"
+          onClick={() => window.api.shellShowItemInFolder(selectedItem?.full_path)}
+        >
           <Icon icon={faFolder} />
         </div>
 
@@ -55,12 +66,6 @@ function RightTop(): React.ReactElement {
           )
         })}
 
-        <div className="icon">
-          <Icon icon={faArrowUp} />
-        </div>
-        <div className="icon">
-          <Icon icon={faGlobe} />
-        </div>
       </div>
     </div>
   )

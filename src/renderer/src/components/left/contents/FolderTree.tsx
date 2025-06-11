@@ -11,7 +11,7 @@ import {
   fetchDisks,
   fetchTreeItems,
   getNthOfTreeItems,
-  getCountOfTreeItems,
+  getCountOfTreeItems
 } from '@renderer/components/left/contents/tree'
 
 function FolderTree(): React.ReactElement {

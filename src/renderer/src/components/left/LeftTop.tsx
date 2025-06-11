@@ -14,7 +14,7 @@ import type { HomePathMap } from '@renderer/types'
 import { useFolderTreeStore } from '@renderer/store/folderTreeStore'
 import { useFolderTreeRefStore } from '@renderer/store/folderTreeRefStore'
 import { useSelectedTreeItemStore } from '@renderer/store/selectedTreeItemStore'
-import { renderPath } from '@renderer/components/left/contents/tree'
+import { renderTreeFromPath } from '@renderer/components/left/contents/tree'
 
 function LeftTop(): React.ReactElement {
   const setFolderTree = useFolderTreeStore((state) => state.setFolderTree)
@@ -42,7 +42,7 @@ function LeftTop(): React.ReactElement {
     TemplateDir: ''
   })
   const clickHomeDir = async (fullPath: string): Promise<void> => {
-    await renderPath(fullPath, {
+    await renderTreeFromPath(fullPath, {
       setFolderTree,
       folderTreeRef,
       setSelectedItem,

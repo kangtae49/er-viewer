@@ -147,7 +147,7 @@ export const fetchFolderTree = async (
   return [folderTree, selectedItem, curIdx]
 }
 
-export const renderPath = async (
+export const renderTreeFromPath = async (
   fullPath: string,
   stores: {
     setFolderTree: FolderTreeStore['setFolderTree']

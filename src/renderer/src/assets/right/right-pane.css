@@ -62,7 +62,8 @@
 .content .view-iframe iframe { width: 100%; height: 100%; border:none; }
 
 .right-top { display: flex; width: 100%; height: 25px; margin:0; padding: 0 0 0 3px; background-color: white;}
-.right-top .title-path { display: flex; align-items: center; width: 100%; height: 100%;}
-.right-top .title-path .icon { padding: 0 0 0 5px; cursor: pointer;}
+.right-top .title-path { display: flex; align-items: center; width: 100%; height: 100%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;}
+.right-top .title-path .icon { padding: 0 0 0 3px; cursor: pointer;}
+.right-top .title-path .icon:hover { transform: scale(1.2); color: #bd623c;}
 .right-top .title-path .part-list { cursor: pointer; }
 .right-top .title-path .part-list:hover { cursor: pointer; background-color: #bfd2e3}

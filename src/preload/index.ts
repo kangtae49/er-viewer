@@ -1,4 +1,4 @@
-import { contextBridge, ipcRenderer } from 'electron'
+import { contextBridge, ipcRenderer, shell } from 'electron'
 import { electronAPI } from '@electron-toolkit/preload'
 
 import path from 'node:path'
@@ -25,6 +25,9 @@ export interface FolderAPI {
   getState: <T>(key: string, default_val: object | undefined) => Promise<T>
   getHomeDir: () => Promise<HomePathMap>
   getDisks: () => Promise<DiskInfo[]>
+  shellOpenPath: (path: string | undefined) => Promise<string>
+  shellOpenExternal: (path: string | undefined) => Promise<void>
+  shellShowItemInFolder: (path: string | undefined) => void
 }
 
 // Custom APIs for renderer
@@ -65,6 +68,22 @@ const api: FolderAPI = {
   },
   getDisks: async (): Promise<DiskInfo[]> => {
     return new FolderApi().getDisks().then(JSON.parse)
+  },
+  shellOpenPath: async (path: string | undefined): Promise<string> => {
+    if (path) {
+      return shell.openPath(path)
+    }
+    return ''
+  },
+  shellOpenExternal: async (path: string | undefined): Promise<void> => {
+    if (path) {
+      return shell.openExternal(path)
+    }
+  },
+  shellShowItemInFolder: (path: string | undefined): void => {
+    if (path) {
+      return shell.showItemInFolder(path)
+    }
   }
 }
 
