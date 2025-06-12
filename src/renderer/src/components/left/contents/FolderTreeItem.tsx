@@ -2,15 +2,51 @@ import React from 'react'
 import { TreeItem } from '@renderer/types'
 import { FontAwesomeIcon as Icon } from '@fortawesome/react-fontawesome'
 import { faFolder, faFile } from '@fortawesome/free-solid-svg-icons'
-import { SEP, TREE_DEPT_SIZE } from '@renderer/components/left/contents/tree'
+import {
+  fetchTreeItems,
+  selectTreeItem,
+  getNthParent,
+  SEP,
+  TREE_DEPT_SIZE
+} from '@renderer/components/left/contents/tree'
+import { useFolderTreeStore } from '@renderer/store/folderTreeStore'
+import { useSelectedTreeItemStore } from '@renderer/store/selectedTreeItemStore'
 
 type Prop = {
   style: React.CSSProperties
   treeItem: TreeItem
-  clickIcon: (treeItem?: TreeItem) => void
-  clickLabel: (treeItem?: TreeItem) => void
 }
-function FolderTreeItem({ treeItem, style, clickIcon, clickLabel }: Prop): React.ReactElement {
+function FolderTreeItem({ treeItem, style }: Prop): React.ReactElement {
+  const folderTree = useFolderTreeStore((state) => state.folderTree)
+  const setFolderTree = useFolderTreeStore((state) => state.setFolderTree)
+  const selectedItem = useSelectedTreeItemStore((state) => state.selectedItem)
+  const setSelectedItem = useSelectedTreeItemStore((state) => state.setSelectedItem)
+
+  const clickIcon = async (treeItem?: TreeItem): Promise<void> => {
+    console.log('click', treeItem)
+    if (folderTree) {
+      if (treeItem?.dir) {
+        if (!treeItem.items) {
+          const treeItems = await fetchTreeItems(treeItem)
+          if (!treeItems) {
+            delete treeItem.items
+          }
+        } else {
+          delete treeItem.items
+        }
+        setFolderTree([...folderTree])
+      } else {
+        clickLabel(treeItem)
+      }
+    }
+  }
+
+  const clickLabel = (newTreeItem?: TreeItem): void => {
+    console.log('clickLabel', newTreeItem)
+    selectTreeItem(selectedItem, newTreeItem)
+    setSelectedItem(newTreeItem)
+  }
+
   let fullPath = treeItem.full_path
   if (fullPath.endsWith(`:${SEP}`)) {
     fullPath = fullPath.replaceAll(SEP, '')
@@ -42,7 +78,7 @@ function FolderTreeItem({ treeItem, style, clickIcon, clickLabel }: Prop): React
         return (
           <div
             className="depth"
-            key={idx}
+            key={`tree-item-depth-${idx}`}
             style={depth_style}
             title={path}
             onClick={() => clickIcon(parentTreeItem)}
@@ -53,13 +89,13 @@ function FolderTreeItem({ treeItem, style, clickIcon, clickLabel }: Prop): React
           </div>
         )
       })}
-      <div className="ico" style={icon_style} onClick={() => clickIcon(treeItem)}>
-        <Icon icon={treeItem.dir ? faFolder : faFile} />
-      </div>
       <div className="nm" style={nm_style}>
+        <div className="icon" style={icon_style} onClick={() => clickIcon(treeItem)}>
+          <Icon icon={treeItem.dir ? faFolder : faFile} />
+        </div>
         <div
           className="label"
-          title={treeItem.nm}
+          title={treeItem.full_path}
           style={nm_label_style}
           onClick={() => clickLabel(treeItem)}
         >
@@ -68,18 +104,6 @@ function FolderTreeItem({ treeItem, style, clickIcon, clickLabel }: Prop): React
       </div>
     </div>
   )
-}
-
-function getNthParent(item: TreeItem | undefined, n: number): TreeItem | undefined {
-  let current = item
-  let count = 0
-
-  while (current && count < n) {
-    current = current?.parent
-    count++
-  }
-
-  return current
 }
 
 export default FolderTreeItem

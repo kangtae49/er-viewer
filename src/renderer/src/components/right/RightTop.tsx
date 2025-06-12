@@ -52,17 +52,12 @@ function RightTop(): React.ReactElement {
 
         {fullPathList.map((fullPath, idx) => {
           return (
-            <>
+            <div key={`part-list-${idx}`} className="part-list">
               {idx != 0 ? SEP : null}
-              <div
-                className="part-list"
-                key={idx}
-                title={fullPath}
-                onClick={() => clickPath(fullPath)}
-              >
+              <div className="part" title={fullPath} onClick={() => clickPath(fullPath)}>
                 {pathList[idx]}
               </div>
-            </>
+            </div>
           )
         })}
 

@@ -10,6 +10,7 @@ export type TreeItem = {
   ext?: string
   mt?: string
   sz?: number
+  tm?: number
   items?: TreeItem[]
   selected?: boolean
 }

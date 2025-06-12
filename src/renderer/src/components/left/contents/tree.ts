@@ -7,10 +7,11 @@ import { SelectedTreeItemStore } from '@renderer/store/selectedTreeItemStore'
 export const SEP = '\\'
 export const TREE_ITEM_SIZE = 18
 export const TREE_DEPT_SIZE = 13
+export const LIST_ITEM_SIZE = 18
 
 const treeParams: OptParams = {
   cache_nm: 'folder-tree',
-  meta_types: ['Ext', 'Mt', 'Sz'],
+  meta_types: ['Ext', 'Mt', 'Sz', 'Tm'],
   ordering: [
     { nm: 'Dir', asc: 'Asc' },
     { nm: 'Nm', asc: 'Asc' }
@@ -47,15 +48,28 @@ const fromItem = (item: Item, parentTreeItem: TreeItem): TreeItem => {
     full_path: fullPath,
     parent: parentTreeItem.parent
   }
-  if (item.dir) treeItem.dir = item.dir
-  if (item.ext) treeItem.ext = item.ext
-  if (item.mt) treeItem.mt = item.mt
-  if (item.sz) treeItem.sz = Number(item.sz)
+  if (item.dir != undefined) treeItem.dir = item.dir
+  if (item.ext != undefined) treeItem.ext = item.ext
+  if (item.mt != undefined) treeItem.mt = item.mt
+  if (item.sz != undefined) treeItem.sz = Number(item.sz)
+  if (item.tm != undefined) treeItem.tm = Number(item.tm)
 
   if (parentTreeItem) {
     treeItem.parent = parentTreeItem
   }
   return treeItem
+}
+
+export function getNthParent(item: TreeItem | undefined, n: number): TreeItem | undefined {
+  let current = item
+  let count = 0
+
+  while (current && count < n) {
+    current = current?.parent
+    count++
+  }
+
+  return current
 }
 
 export function getNthOfTreeItems(
@@ -103,14 +117,26 @@ export const fetchDisks = async (): Promise<FolderTree> => {
   return disks.map(fromDisk)
 }
 
-export const fetchTreeItems = async (treeItem: TreeItem): Promise<TreeItem[] | undefined> => {
+export const fetchTreeItems = async (
+  treeItem: TreeItem | undefined,
+  appendChildItems: boolean | undefined = true
+): Promise<TreeItem[] | undefined> => {
+  if (!treeItem) {
+    return undefined
+  }
   const folder = await window.api.readFolder({ ...treeParams, path_str: treeItem.full_path })
   const folderItems = folder?.item?.items
   if (folderItems) {
     const treeItems = folderItems.map((folderItem) => {
       return fromItem(folderItem, treeItem)
     })
-    treeItem.items = treeItems
+    if (appendChildItems) {
+      if (treeItem.items && treeItem.tm != folder?.item?.tm) {
+        treeItem.items = treeItems
+      } else {
+        treeItem.items = treeItems
+      }
+    }
     return treeItems
   }
   return undefined
@@ -137,7 +163,6 @@ export const fetchFolderTree = async (
     }
     const fetchItems = await fetchTreeItems(selectedItem)
     if (fetchItems) {
-      console.log('fetch ok:', fetchItems)
       parentTree = fetchItems
     } else {
       break
@@ -156,7 +181,6 @@ export const renderTreeFromPath = async (
     selectedItem: SelectedTreeItemStore['selectedItem']
   }
 ): Promise<void> => {
-  console.log('renderPath', fullPath)
   const { setFolderTree, folderTreeRef, setSelectedItem, selectedItem } = stores
   if (fullPath == '/') {
     fetchDisks().then((disks) => {
