@@ -243,7 +243,6 @@ impl Api {
 
         println!("mime_type: {}", mime_type);
 
-        // application/octet-stream  인경우 기본적으로 안보이게 하나 file_size가 5M 미만인경우는 열기시도
         let sz = path.metadata()?.len();
         
         if sz > 5 * 1024 * 1024 {

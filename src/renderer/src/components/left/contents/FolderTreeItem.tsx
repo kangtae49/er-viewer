@@ -57,21 +57,13 @@ function FolderTreeItem({ treeItem, style }: Prop): React.ReactElement {
   })
   const iconWidth = 18
   const nm_minus = TREE_DEPT_SIZE * pathList.length + iconWidth
-  const depth_style = {
-    flex: `0 0 ${TREE_DEPT_SIZE}px`,
-    display: 'flex',
-    justifyContent: 'center'
-  }
-  const nm_label_style = {
-    maxWidth: `100%`,
-    backgroundColor: treeItem.selected ? '#bfd2e3' : '#ffffff'
-  }
+  const classNameSelected = treeItem.selected ? 'selected' : ''
   const icon_style = { flex: `0 0 ${iconWidth}px` }
   const nm_style = {
     width: `calc(100% - ${nm_minus}px)`
   }
   return (
-    <div className="item" style={style}>
+    <div className={`item ${classNameSelected}`} style={style}>
       {pathList.map((path, idx) => {
         const color = idx % 2 === 0 ? '#c8ada4' : '#6a99b8'
         const parentTreeItem = getNthParent(treeItem, pathList.length - idx)
@@ -79,7 +71,6 @@ function FolderTreeItem({ treeItem, style }: Prop): React.ReactElement {
           <div
             className="depth"
             key={`tree-item-depth-${idx}`}
-            style={depth_style}
             title={path}
             onClick={() => clickIcon(parentTreeItem)}
           >
@@ -96,7 +87,7 @@ function FolderTreeItem({ treeItem, style }: Prop): React.ReactElement {
         <div
           className="label"
           title={treeItem.full_path}
-          style={nm_label_style}
+          // style={nm_label_style}
           onClick={() => clickLabel(treeItem)}
         >
           {treeItem.nm}

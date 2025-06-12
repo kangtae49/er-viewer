@@ -1,6 +1,6 @@
 import React from 'react'
 import { FontAwesomeIcon as Icon } from '@fortawesome/react-fontawesome'
-import { faFolder, faArrowUp, faGlobe } from '@fortawesome/free-solid-svg-icons'
+import { faFolder, faArrowUp, faRocket } from '@fortawesome/free-solid-svg-icons'
 import { renderTreeFromPath, SEP } from '@renderer/components/left/contents/tree'
 import { useSelectedTreeItemStore } from '@renderer/store/selectedTreeItemStore'
 import { useFolderTreeStore } from '@renderer/store/folderTreeStore'
@@ -41,7 +41,7 @@ function RightTop(): React.ReactElement {
           <Icon icon={faArrowUp} onClick={() => clickPath(selectedItem?.parent?.full_path)} />
         </div>
         <div className="icon">
-          <Icon icon={faGlobe} onClick={() => window.api.shellOpenPath(selectedItem?.full_path)} />
+          <Icon icon={faRocket} onClick={() => window.api.shellOpenPath(selectedItem?.full_path)} />
         </div>
         <div
           className="icon"

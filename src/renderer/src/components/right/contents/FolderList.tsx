@@ -6,6 +6,8 @@ import { LIST_ITEM_SIZE } from '@renderer/components/left/contents/tree'
 import { useSelectedTreeItemStore } from '@renderer/store/selectedTreeItemStore'
 import { fetchTreeItems } from '@renderer/components/left/contents/tree'
 import { TreeItem } from '@renderer/types'
+import { FontAwesomeIcon as Icon } from '@fortawesome/react-fontawesome'
+import { faCircleChevronUp, faCircleChevronDown, faCircleMinus } from '@fortawesome/free-solid-svg-icons'
 
 function FolderList(): React.ReactElement {
   const selectedItem = useSelectedTreeItemStore((state) => state.selectedItem)
@@ -16,28 +18,37 @@ function FolderList(): React.ReactElement {
   return (
     <>
       {listItems && (
-        <AutoSizer>
-          {({ height, width }) => (
-            <List
-              className="folder-list"
-              height={height}
-              itemCount={listItems?.length || 0}
-              itemSize={LIST_ITEM_SIZE}
-              width={width}
-            >
-              {({ index, style }) => {
-                const listItem = listItems[index]
-                return listItem ? (
-                  <FolderListItem
-                    key={`folder-list-item-${index}`}
-                    style={style}
-                    treeItem={listItem}
-                  />
-                ) : null
-              }}
-          </List>
-          )}
-        </AutoSizer>
+        <>
+          <div className="folder-head">
+            <div className="nm"><Icon icon={faCircleChevronUp}/>name</div>
+            <div className="sz"><Icon icon={faCircleChevronUp}/>size</div>
+            <div className="ext"><Icon icon={faCircleChevronDown}/>ext</div>
+            <div className="tm"><Icon icon={faCircleMinus}/>date</div>
+          </div>
+
+          <AutoSizer>
+            {({ height, width }) => (
+              <List
+                className="folder-list"
+                height={height}
+                itemCount={listItems?.length || 0}
+                itemSize={LIST_ITEM_SIZE}
+                width={width}
+              >
+                {({ index, style }) => {
+                  const listItem = listItems[index]
+                  return listItem ? (
+                    <FolderListItem
+                      key={`folder-list-item-${index}`}
+                      style={style}
+                      treeItem={listItem}
+                    />
+                  ) : null
+                }}
+              </List>
+            )}
+          </AutoSizer>
+        </>
       )}
     </>
   )

@@ -25,7 +25,7 @@ function FileView({ selectedItem }: FileViewProps): React.ReactElement {
     fileViewType = 'Audio'
   } else if (selectedItem?.mt?.startsWith('video/') && sz > 1024 * 500) {
     fileViewType = 'Video'
-  } else if (sz < 1024 * 500) {
+  } else if (sz < 1024 * 1024 * 5) {
     fileViewType = 'Text'
   } else {
     fileViewType = 'None'

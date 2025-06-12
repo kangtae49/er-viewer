@@ -1,10 +1,9 @@
 import React from 'react'
 import { TreeItem } from '@renderer/types'
 import { FontAwesomeIcon as Icon } from '@fortawesome/react-fontawesome'
-import { faFolder, faFile, faGlobe } from '@fortawesome/free-solid-svg-icons'
+import { faFolder, faFile, faRocket } from '@fortawesome/free-solid-svg-icons'
 import { formatFileSize, toDate } from '@renderer/components/utils'
 import { useSelectedTreeItemStore } from '@renderer/store/selectedTreeItemStore'
-// import { renderTreeFromPath } from '@renderer/components/left/contents/tree'
 
 type FolderListItemProps = {
   style: React.CSSProperties
@@ -13,22 +12,27 @@ type FolderListItemProps = {
 
 function FolderListItem({ treeItem, style }: FolderListItemProps): React.ReactElement {
   const setSelectedItem = useSelectedTreeItemStore((state) => state.setSelectedItem)
+  const fullPath = treeItem.full_path
+  const nm = treeItem.nm
+  const sz = formatFileSize(treeItem.sz)
+  const ext = treeItem.dir ? '' : treeItem.ext?.slice(-10) || ''
+  const tm = toDate(treeItem.tm)
   return (
     <div className="item" style={style}>
       <div className="nm">
         <div className="icon">
-          <Icon icon={faGlobe} onClick={() => window.api.shellOpenPath(treeItem?.full_path)} />
+          <Icon icon={faRocket} onClick={() => window.api.shellOpenPath(fullPath)} />
         </div>
-        <div className="icon" onClick={() => window.api.shellShowItemInFolder(treeItem?.full_path)}>
+        <div className="icon" onClick={() => window.api.shellShowItemInFolder(fullPath)}>
           <Icon icon={treeItem.dir ? faFolder : faFile} />
         </div>
-        <div className="label" title={treeItem.full_path} onClick={() => setSelectedItem(treeItem)}>
-          {treeItem.nm}
+        <div className="label" title={fullPath} onClick={() => setSelectedItem(treeItem)}>
+          {nm}
         </div>
       </div>
-      <div className="sz">{formatFileSize(treeItem.sz)}</div>
-      <div className="ext">{treeItem.ext?.slice(-10)}</div>
-      <div className="tm">{toDate(treeItem.tm)}</div>
+      <div className="sz">{sz}</div>
+      <div className="ext">{ext}</div>
+      <div className="tm">{tm}</div>
     </div>
   )
 }
