@@ -42,7 +42,8 @@ function LeftTop(): React.ReactElement {
     TemplateDir: ''
   })
   const clickHomeDir = async (fullPath: string): Promise<void> => {
-    await renderTreeFromPath(fullPath, {
+    await renderTreeFromPath({
+      fullPath,
       setFolderTree,
       folderTreeRef,
       setSelectedItem,

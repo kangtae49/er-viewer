@@ -13,7 +13,8 @@ function RightTop(): React.ReactElement {
   const selectedItem = useSelectedTreeItemStore((state) => state.selectedItem)
   const clickPath = async (fullPath: string | undefined): Promise<void> => {
     if (fullPath) {
-      await renderTreeFromPath(fullPath, {
+      await renderTreeFromPath({
+        fullPath,
         setFolderTree,
         folderTreeRef,
         setSelectedItem,

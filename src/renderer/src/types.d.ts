@@ -14,3 +14,11 @@ export type TreeItem = {
   items?: TreeItem[]
   selected?: boolean
 }
+export type DirectoryViewType = 'FolderList' | 'GalleryList'
+
+export type FolderListOrder = {
+  key: FolderListOrderKey
+  val: FolderListOrderVal
+}
+export type FolderListOrderKey = 'Nm' | 'Ext' | 'Tm' | 'Sz'
+export type FolderListOrderVal = 'Asc' | 'Desc'

@@ -27,7 +27,7 @@ function FolderTreeItem({ treeItem, style }: Prop): React.ReactElement {
     if (folderTree) {
       if (treeItem?.dir) {
         if (!treeItem.items) {
-          const treeItems = await fetchTreeItems(treeItem)
+          const treeItems = await fetchTreeItems({ treeItem })
           if (!treeItems) {
             delete treeItem.items
           }
@@ -43,7 +43,7 @@ function FolderTreeItem({ treeItem, style }: Prop): React.ReactElement {
 
   const clickLabel = (newTreeItem?: TreeItem): void => {
     console.log('clickLabel', newTreeItem)
-    selectTreeItem(selectedItem, newTreeItem)
+    selectTreeItem({ selectedItem, newItem: newTreeItem })
     setSelectedItem(newTreeItem)
   }
 

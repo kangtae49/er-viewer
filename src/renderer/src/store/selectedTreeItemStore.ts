@@ -3,13 +3,10 @@ import { TreeItem } from '@renderer/types'
 
 export interface SelectedTreeItemStore {
   selectedItem?: TreeItem
-  setSelectedItem: (treeItem?: TreeItem) => void
+  setSelectedItem: (selectedItem?: TreeItem) => void
 }
 
 export const useSelectedTreeItemStore = create<SelectedTreeItemStore>((set) => ({
   selectedItem: undefined,
-  setSelectedItem: (treeItem?: TreeItem) =>
-    set(() => ({
-      selectedItem: treeItem
-    }))
+  setSelectedItem: (selectedItem?: TreeItem) => set(() => ({ selectedItem }))
 }))

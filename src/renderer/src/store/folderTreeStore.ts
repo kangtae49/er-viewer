@@ -8,8 +8,5 @@ export interface FolderTreeStore {
 
 export const useFolderTreeStore = create<FolderTreeStore>((set) => ({
   folderTree: undefined,
-  setFolderTree: (folderTree?: FolderTree) =>
-    set(() => ({
-      folderTree: folderTree
-    }))
+  setFolderTree: (folderTree?: FolderTree) => set(() => ({ folderTree }))
 }))

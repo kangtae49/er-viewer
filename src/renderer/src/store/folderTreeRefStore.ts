@@ -10,8 +10,5 @@ export interface FolderTreeRefStore {
 
 export const useFolderTreeRefStore = create<FolderTreeRefStore>((set) => ({
   folderTreeRef: null,
-  setFolderTreeRef: (folderTreeRef: FolderTreeRef) =>
-    set(() => ({
-      folderTreeRef: folderTreeRef
-    }))
+  setFolderTreeRef: (folderTreeRef: FolderTreeRef) => set(() => ({ folderTreeRef }))
 }))

@@ -24,9 +24,12 @@ html, body, #root {
 .fa-rocket:hover {transform: scale(1.2); color: #bd623c;}
 .fa-arrow-up {color: #f4a261; margin-right: 5px;}
 .fa-arrow-up:hover {transform: scale(1.2); color: #bd623c;}
-.fa-circle-chevron-up {color: #f4a261; margin-right: 5px;}
-.fa-circle-chevron-up:hover {transform: scale(1.2); color: #bd623c;}
-.fa-circle-chevron-down {color: #f4a261; margin-right: 5px;}
-.fa-circle-chevron-down:hover {transform: scale(1.2); color: #bd623c;}
+.fa-circle-chevron-up {color: #d33333; margin-right: 5px;}
+.fa-circle-chevron-up:hover {transform: scale(1.2); color: #d33333;}
+.fa-circle-chevron-down {color: #d33333; margin-right: 5px;}
+.fa-circle-chevron-down:hover {transform: scale(1.2); color: #d33333;}
 .fa-circle-minus {color: #f4a261; margin-right: 5px;}
 .fa-circle-minus:hover {transform: scale(1.2); color: #bd623c;}
+.fa-circle-half-stroke {color: #f4a261; margin-right: 5px; cursor: pointer}
+.fa-circle-half-stroke.visible {color: #d33333;}
+.fa-circle-half-stroke:hover {transform: scale(1.2); color: #bd623c;}

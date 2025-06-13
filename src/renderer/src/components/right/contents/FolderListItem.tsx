@@ -4,6 +4,7 @@ import { FontAwesomeIcon as Icon } from '@fortawesome/react-fontawesome'
 import { faFolder, faFile, faRocket } from '@fortawesome/free-solid-svg-icons'
 import { formatFileSize, toDate } from '@renderer/components/utils'
 import { useSelectedTreeItemStore } from '@renderer/store/selectedTreeItemStore'
+import { useFolderListVisibleColsStore } from '@renderer/store/folderListVisibleColsStore'
 
 type FolderListItemProps = {
   style: React.CSSProperties
@@ -12,6 +13,9 @@ type FolderListItemProps = {
 
 function FolderListItem({ treeItem, style }: FolderListItemProps): React.ReactElement {
   const setSelectedItem = useSelectedTreeItemStore((state) => state.setSelectedItem)
+  const folderListVisibleCols = useFolderListVisibleColsStore(
+    (state) => state.folderListVisibleCols
+  )
   const fullPath = treeItem.full_path
   const nm = treeItem.nm
   const sz = formatFileSize(treeItem.sz)
@@ -30,9 +34,9 @@ function FolderListItem({ treeItem, style }: FolderListItemProps): React.ReactEl
           {nm}
         </div>
       </div>
-      <div className="sz">{sz}</div>
-      <div className="ext">{ext}</div>
-      <div className="tm">{tm}</div>
+      {folderListVisibleCols.includes('Sz') && <div className="sz">{sz}</div>}
+      {folderListVisibleCols.includes('Ext') && <div className="ext">{ext}</div>}
+      {folderListVisibleCols.includes('Tm') && <div className="tm">{tm}</div>}
     </div>
   )
 }

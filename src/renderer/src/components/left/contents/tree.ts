@@ -8,6 +8,7 @@ export const SEP = '\\'
 export const TREE_ITEM_SIZE = 18
 export const TREE_DEPT_SIZE = 13
 export const LIST_ITEM_SIZE = 18
+export const LIST_HEAD_SIZE = 25
 
 const treeParams: OptParams = {
   cache_nm: 'folder-tree',
@@ -18,10 +19,13 @@ const treeParams: OptParams = {
   ]
 }
 
-export const selectTreeItem = (
-  selectedItem: TreeItem | undefined,
+export const selectTreeItem = ({
+  selectedItem,
+  newItem
+}: {
+  selectedItem: TreeItem | undefined
   newItem: TreeItem | undefined
-): void => {
+}): void => {
   if (selectedItem) {
     delete selectedItem?.selected
   }
@@ -38,7 +42,7 @@ const fromDisk = (disk: DiskInfo): TreeItem => {
   }
 }
 
-const fromItem = (item: Item, parentTreeItem: TreeItem): TreeItem => {
+const fromItem = ({ item, parentTreeItem }: { item: Item; parentTreeItem: TreeItem }): TreeItem => {
   const basePath = parentTreeItem.full_path
   const fullPath = basePath.endsWith(`:${SEP}`)
     ? [basePath.replaceAll(SEP, ''), item.nm].join(SEP)
@@ -117,10 +121,13 @@ export const fetchDisks = async (): Promise<FolderTree> => {
   return disks.map(fromDisk)
 }
 
-export const fetchTreeItems = async (
-  treeItem: TreeItem | undefined,
-  appendChildItems: boolean | undefined = true
-): Promise<TreeItem[] | undefined> => {
+export const fetchTreeItems = async ({
+  treeItem,
+  appendChildItems = true
+}: {
+  treeItem?: TreeItem
+  appendChildItems?: boolean
+}): Promise<TreeItem[] | undefined> => {
   if (!treeItem) {
     return undefined
   }
@@ -128,7 +135,7 @@ export const fetchTreeItems = async (
   const folderItems = folder?.item?.items
   if (folderItems) {
     const treeItems = folderItems.map((folderItem) => {
-      return fromItem(folderItem, treeItem)
+      return fromItem({ item: folderItem, parentTreeItem: treeItem })
     })
     if (appendChildItems) {
       if (treeItem.items && treeItem.tm != folder?.item?.tm) {
@@ -142,10 +149,12 @@ export const fetchTreeItems = async (
   return undefined
 }
 
-export const fetchFolderTree = async (
-  full_path: string
-): Promise<[TreeItem[], TreeItem | undefined, number]> => {
-  const paths = full_path.split(SEP).filter((path) => path != '')
+export const fetchFolderTree = async ({
+  fullPath
+}: {
+  fullPath: string
+}): Promise<[TreeItem[], TreeItem | undefined, number]> => {
+  const paths = fullPath.split(SEP).filter((path) => path != '')
   const folderTree = await fetchDisks()
   let parentTree = folderTree
   let selectedItem: TreeItem | undefined
@@ -161,7 +170,7 @@ export const fetchFolderTree = async (
     if (i == paths.length - 1) {
       break
     }
-    const fetchItems = await fetchTreeItems(selectedItem)
+    const fetchItems = await fetchTreeItems({ treeItem: selectedItem })
     if (fetchItems) {
       parentTree = fetchItems
     } else {
@@ -172,24 +181,27 @@ export const fetchFolderTree = async (
   return [folderTree, selectedItem, curIdx]
 }
 
-export const renderTreeFromPath = async (
-  fullPath: string,
-  stores: {
-    setFolderTree: FolderTreeStore['setFolderTree']
-    folderTreeRef: FolderTreeRefStore['folderTreeRef']
-    setSelectedItem: SelectedTreeItemStore['setSelectedItem']
-    selectedItem: SelectedTreeItemStore['selectedItem']
-  }
-): Promise<void> => {
-  const { setFolderTree, folderTreeRef, setSelectedItem, selectedItem } = stores
+export const renderTreeFromPath = async ({
+  fullPath,
+  setFolderTree,
+  folderTreeRef,
+  setSelectedItem,
+  selectedItem
+}: {
+  fullPath: string
+  setFolderTree: FolderTreeStore['setFolderTree']
+  folderTreeRef: FolderTreeRefStore['folderTreeRef']
+  setSelectedItem: SelectedTreeItemStore['setSelectedItem']
+  selectedItem: SelectedTreeItemStore['selectedItem']
+}): Promise<void> => {
   if (fullPath == '/') {
     fetchDisks().then((disks) => {
       setFolderTree(disks)
     })
   } else {
-    fetchFolderTree(fullPath).then(([newFolderTree, newSelectedItem, newSelectedIndex]) => {
+    fetchFolderTree({ fullPath }).then(([newFolderTree, newSelectedItem, newSelectedIndex]) => {
       setFolderTree([...newFolderTree])
-      selectTreeItem(selectedItem, newSelectedItem)
+      selectTreeItem({ selectedItem, newItem: newSelectedItem })
       setSelectedItem(newSelectedItem)
       const totalCount = getCountOfTreeItems(newFolderTree)
       if (document.querySelector('.folder-tree')?.scrollHeight == totalCount * TREE_ITEM_SIZE) {
