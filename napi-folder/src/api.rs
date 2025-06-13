@@ -61,7 +61,6 @@ impl Api {
             cache_nm,
             ..
         } = params.clone();
-
         let mut folder = Folder::default();
         let mut abs = std::path::absolute(PathBuf::from(path_str))?;
         let is_file = abs.is_file();
@@ -114,10 +113,18 @@ impl Api {
         let mut system_time : Option<SystemTime> = None;
         match abs.metadata() {
             Ok(meta) => {
-                system_time = meta.modified().ok();
+                // system_time = meta.modified().ok();
+                system_time = match meta.modified() {
+                    Ok(time) => Some(time),
+                    Err(e) => {
+                        println!("Error Modified SystemTime: {:?} {}", abs, e);
+                        None
+                    }
+                };
                 item.tm = system_time.map(|t|t.to_sec());
             },
-            Err(_) => {
+            Err(e) => {
+                println!("Error metadata: {:?} {}", abs, e);
                 item.tm = None;
             }
         }
@@ -126,13 +133,12 @@ impl Api {
 
         let mut sorted_items: Vec<Item>;
         
-
         if let Some(cache_nm_str) = cache_nm {
             let cache_key = CacheKey {
                 nm: cache_nm_str,
                 path: folder.path_param.clone(),
                 tm: match system_time {
-                    Some(system_time) => system_time,
+                    Some(sys_tm) => sys_tm,
                     None => return Err(ApiError::Folder(String::from("Err SystemTime"))),
                 },
                 meta_types: meta_types.clone().into_iter().collect(),
@@ -141,12 +147,11 @@ impl Api {
             sorted_items = match self.cache_folder.get(&cache_key).await {
                 Some(mut cache_val) => {
                     if cache_val.ordering != ordering  {
-                        // let mut items_cache = get_items_win32(abs.to_string_lossy().as_ref(), &meta_types).unwrap_or(vec![]);
-                        // update_items(&mut items_cache, &meta_types);
                         println!("sort");
                         sort_items(&mut cache_val.items, &ordering);
                         
-                        // cache_val.items = items_cache;
+                        cache_val.ordering = ordering.clone();
+                        cache_val = cache_val.clone();
                         self.cache_folder.insert(cache_key.clone(), cache_val.clone()).await;
                     } else {
                         println!("hit cache folder");

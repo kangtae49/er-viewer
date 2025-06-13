@@ -9,7 +9,11 @@ import {
   faCircleMinus,
   faCircleHalfStroke
 } from '@fortawesome/free-solid-svg-icons'
-import { LIST_ITEM_SIZE, LIST_HEAD_SIZE, fetchTreeItems } from '@renderer/components/left/contents/tree'
+import {
+  LIST_ITEM_SIZE,
+  LIST_HEAD_SIZE,
+  fetchTreeItems
+} from '@renderer/components/left/contents/tree'
 import { FolderListOrderKey, FolderListOrderVal, TreeItem } from '@renderer/types'
 import { useSelectedTreeItemStore } from '@renderer/store/selectedTreeItemStore'
 import { useFolderListOrderStore } from '@renderer/store/folderListOrderStore'
@@ -28,15 +32,21 @@ function FolderList(): React.ReactElement {
   const [listItems, setListItems] = useState<TreeItem[] | undefined>(undefined)
 
   const clickOrder = (key: FolderListOrderKey): void => {
-    console.log('clickOrder', key)
     let val: FolderListOrderVal = 'Asc'
     if (folderListOrder.key == key) {
       val = folderListOrder.val == 'Asc' ? 'Desc' : 'Asc'
+    } else {
+      val = 'Asc'
     }
     setFolderListOrder({
       key,
       val
     })
+    if (listItems) {
+      setListItems([...listItems])
+    } else {
+      setListItems([])
+    }
   }
   const clickVisible = (key: FolderListOrderKey): void => {
     if (folderListVisibleCols.includes(key)) {
@@ -60,10 +70,10 @@ function FolderList(): React.ReactElement {
     iconTm = folderListOrder.val == 'Asc' ? faCircleChevronUp : faCircleChevronDown
   }
   useEffect(() => {
-    fetchTreeItems({ treeItem: selectedItem, appendChildItems: false }).then((fetchItems) =>
-      setListItems(fetchItems)
+    fetchTreeItems({ treeItem: selectedItem, appendChildItems: false, folderListOrder }).then(
+      (fetchItems) => setListItems(fetchItems)
     )
-  }, [selectedItem])
+  }, [folderListOrder, selectedItem])
   return (
     <>
       {listItems && (

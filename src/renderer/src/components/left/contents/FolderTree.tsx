@@ -21,7 +21,11 @@ function FolderTree(): React.ReactElement {
   useEffect(() => {
     setFolderTreeRef(listRef)
     fetchDisks().then((folderTree: FolderTree | undefined) => {
-      setFolderTree(folderTree)
+      if (folderTree) {
+        setFolderTree([...folderTree])
+      } else {
+        setFolderTree(undefined)
+      }
     })
   }, [setFolderTree, setFolderTreeRef])
   return (

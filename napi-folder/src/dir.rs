@@ -322,6 +322,7 @@ pub fn sort_items(items: &mut Vec<Item>, ordering: &Vec<OrdItem>) {
                 OrderBy::Ext if !a.dir => cmp_opt_str_item(&a.ext, &b.ext, &ord.asc),
                 OrderBy::Mt if !a.dir => cmp_opt_str_item(&a.mt, &b.mt, &ord.asc),
                 OrderBy::Sz if a.sz.ne(&b.sz)  => cmp_opt_item(&a.sz, &b.sz, &ord.asc),
+                OrderBy::Tm if a.tm.ne(&b.tm)  => cmp_opt_item(&a.tm, &b.tm, &ord.asc),
                 _ => None,
             };
             if let Some(ord) = res {

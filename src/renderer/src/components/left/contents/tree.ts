@@ -3,6 +3,7 @@ import { DiskInfo, Item, OptParams } from 'napi-bindings'
 import { FolderTreeStore } from '@renderer/store/folderTreeStore'
 import { FolderTreeRefStore } from '@renderer/store/folderTreeRefStore'
 import { SelectedTreeItemStore } from '@renderer/store/selectedTreeItemStore'
+import { FolderListOrderStore } from '@renderer/store/folderListOrderStore'
 
 export const SEP = '\\'
 export const TREE_ITEM_SIZE = 18
@@ -123,15 +124,59 @@ export const fetchDisks = async (): Promise<FolderTree> => {
 
 export const fetchTreeItems = async ({
   treeItem,
-  appendChildItems = true
+  appendChildItems = true,
+  folderListOrder
 }: {
   treeItem?: TreeItem
   appendChildItems?: boolean
+  folderListOrder?: FolderListOrderStore['folderListOrder']
 }): Promise<TreeItem[] | undefined> => {
   if (!treeItem) {
     return undefined
   }
-  const folder = await window.api.readFolder({ ...treeParams, path_str: treeItem.full_path })
+  let params: OptParams = {
+    ...treeParams,
+    path_str: treeItem.full_path
+  }
+  if (folderListOrder) {
+    if (folderListOrder.key == 'Nm') {
+      params = {
+        ...params,
+        ordering: [
+          { nm: 'Dir', asc: folderListOrder.val },
+          { nm: 'Nm', asc: folderListOrder.val }
+        ]
+      }
+    } else if (folderListOrder.key == 'Ext') {
+      params = {
+        ...params,
+        ordering: [
+          { nm: 'Dir', asc: folderListOrder.val },
+          { nm: 'Ext', asc: folderListOrder.val },
+          { nm: 'Nm', asc: folderListOrder.val }
+        ]
+      }
+    } else if (folderListOrder.key == 'Sz') {
+      params = {
+        ...params,
+        ordering: [
+          { nm: 'Dir', asc: folderListOrder.val },
+          { nm: 'Sz', asc: folderListOrder.val },
+          { nm: 'Nm', asc: folderListOrder.val }
+        ]
+      }
+    } else if (folderListOrder.key == 'Tm') {
+      params = {
+        ...params,
+        ordering: [
+          { nm: 'Dir', asc: folderListOrder.val },
+          { nm: 'Tm', asc: folderListOrder.val },
+          { nm: 'Nm', asc: folderListOrder.val }
+        ]
+      }
+    }
+  }
+  const folder = await window.api.readFolder(params)
   const folderItems = folder?.item?.items
   if (folderItems) {
     const treeItems = folderItems.map((folderItem) => {

@@ -16,9 +16,7 @@ export const ShadowDomWrapper: React.FC<ShadowDomWrapperProps> = ({
   const [shadowRoot, setShadowRoot] = useState<ShadowRoot | null>(null)
 
   useEffect(() => {
-    // if (containerRef.current && !shadowRoot) {
     if (!containerRef?.current?.shadowRoot) {
-      console.log('ShadowDomWrapper')
       const root = containerRef?.current?.attachShadow({ mode })
 
       if (root) {
