@@ -5,6 +5,7 @@ html, body, #root {
 
 }
 .main-pane {
+    --selected-color: #0075ff;
     font-size: 0.8em;
 }
 
@@ -24,12 +25,18 @@ html, body, #root {
 .fa-rocket:hover {transform: scale(1.2); color: #bd623c;}
 .fa-arrow-up {color: #f4a261; margin-right: 5px;}
 .fa-arrow-up:hover {transform: scale(1.2); color: #bd623c;}
-.fa-circle-chevron-up {color: #d33333; margin-right: 5px;}
-.fa-circle-chevron-up:hover {transform: scale(1.2); color: #d33333;}
-.fa-circle-chevron-down {color: #d33333; margin-right: 5px;}
-.fa-circle-chevron-down:hover {transform: scale(1.2); color: #d33333;}
+.fa-circle-chevron-up {color: var(--selected-color); margin-right: 5px;}
+.fa-circle-chevron-up:hover {transform: scale(1.2); color: var(--selected-color);}
+.fa-circle-chevron-down {color: var(--selected-color); margin-right: 5px;}
+.fa-circle-chevron-down:hover {transform: scale(1.2); color: var(--selected-color);}
 .fa-circle-minus {color: #f4a261; margin-right: 5px;}
 .fa-circle-minus:hover {transform: scale(1.2); color: #bd623c;}
 .fa-circle-half-stroke {color: #f4a261; margin-right: 5px; cursor: pointer}
-.fa-circle-half-stroke.visible {color: #d33333;}
+.fa-circle-half-stroke.visible {color: var(--selected-color);}
 .fa-circle-half-stroke:hover {transform: scale(1.2); color: #bd623c;}
+.fa-list {color: #f4a261; margin-right: 5px;}
+.fa-list:hover {transform: scale(1.2); color: #bd623c;}
+.fa-list.selected {color: var(--selected-color);}
+.fa-table-cells {color: #f4a261; margin-right: 5px;}
+.fa-table-cells:hover {transform: scale(1.2); color: #bd623c;}
+.fa-table-cells.selected {color: var(--selected-color);}

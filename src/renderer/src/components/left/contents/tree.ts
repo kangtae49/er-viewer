@@ -10,6 +10,7 @@ export const TREE_ITEM_SIZE = 18
 export const TREE_DEPT_SIZE = 13
 export const LIST_ITEM_SIZE = 18
 export const LIST_HEAD_SIZE = 25
+export const SLIDER_SIZE = 20
 
 const treeParams: OptParams = {
   cache_nm: 'folder-tree',

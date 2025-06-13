@@ -55,8 +55,6 @@
 .content .folder-head .ext { flex: 0 0 60px; text-align: center; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;}
 .content .folder-head .tm { flex: 0 0 125px; text-align: center; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;}
 
-
-
 .content .folder-list .item .nm { flex: 1; display: flex; text-align: left; width: 100%;}
 .content .folder-list .item .nm .icon { flex: 0 0 18px; cursor: pointer; }
 .content .folder-list .item .nm .label { cursor: pointer; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;}
@@ -87,3 +85,36 @@
 .right-top .title-path .part-list { display: flex; cursor: pointer; }
 .right-top .title-path .part { cursor: pointer; }
 .right-top .title-path .part:hover { cursor: pointer; background-color: #bfd2e3}
+
+.slider-top { display: flex; height: 20px;}
+.slider-top .slider-w { width: 100%; }
+.slider-top .slider-w input { width: 100%; height: 20px; }
+.slider-left { display: flex; flex-direction: row; width: 20px; }
+.slider-left .slider-h { height: 100%; }
+.slider-left .slider-h input {
+    width: 20px;
+    height: 100%;
+    writing-mode: vertical-lr;
+    direction: rtl;
+    transform: rotate(180deg)
+}
+.slider-left .folder-gallery {
+
+}
+
+.content .folder-gallery .item {
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    overflow: hidden;
+    padding: 0;
+    box-sizing: border-box;
+}
+.content .folder-gallery .item .col {
+    box-sizing: border-box;
+    padding: 1px;
+    width: 100%;
+    height: 100%;
+    border: 1px solid #0075ff;
+    overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+}
