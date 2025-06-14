@@ -14,6 +14,12 @@ export interface FolderListSliderStore {
 }
 
 export const useFolderListSliderStore = create<FolderListSliderStore>((set) => ({
-  sliderPos: { x: SLIDER_STEP, y: SLIDER_STEP, checked: false, maxX: 32, maxY: 32 },
+  sliderPos: {
+    x: SLIDER_STEP * 7,
+    y: SLIDER_STEP * 3,
+    checked: false,
+    maxX: SLIDER_STEP * 7,
+    maxY: SLIDER_STEP * 3
+  },
   setSliderPos: (sliderPos: SliderPos) => set(() => ({ sliderPos }))
 }))

@@ -1,9 +1,9 @@
 import React, { useEffect, useRef } from 'react'
 import { TreeItem } from '@renderer/types'
 import { formatFileSize, toDate } from '@renderer/components/utils'
-import { useFolderListVisibleColsStore } from '@renderer/store/folderListVisibleColsStore'
 import { FontAwesomeIcon as Icon } from '@fortawesome/react-fontawesome'
 import { faFile, faFolder, faRocket } from '@fortawesome/free-solid-svg-icons'
+import { useFolderListVisibleColsStore } from '@renderer/store/folderListVisibleColsStore'
 import { useSelectedTreeItemStore } from '@renderer/store/selectedTreeItemStore'
 
 type GalleryListItemProp = {

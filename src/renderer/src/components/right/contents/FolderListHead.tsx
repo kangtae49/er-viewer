@@ -15,6 +15,7 @@ import { useFolderListOrderStore } from '@renderer/store/folderListOrderStore'
 import { useFolderListStore } from '@renderer/store/folderListStore'
 import { useSelectedTreeItemStore } from '@renderer/store/selectedTreeItemStore'
 import { useDirectoryViewTypeStore } from '@renderer/store/directoryViewTypeStore'
+import { formatFileSize } from '@renderer/components/utils'
 
 function FolderListHead(): React.ReactElement {
   const selectedItem = useSelectedTreeItemStore((state) => state.selectedItem)
@@ -74,6 +75,8 @@ function FolderListHead(): React.ReactElement {
       (fetchItems) => setFolderList(fetchItems)
     )
   }, [folderListOrder, selectedItem, setFolderList])
+  const total = folderList?.length || 0
+  const size = folderList?.map((item) => item?.sz || 0).reduce((acc, val) => acc + val, 0) || 0
   return (
     <div className="folder-head">
       {selectedItem?.dir && (
@@ -90,6 +93,9 @@ function FolderListHead(): React.ReactElement {
           />
         </div>
       )}
+      <div>
+        {total.toLocaleString()} files {formatFileSize(size)}
+      </div>
       <div className="nm">
         <Icon icon={iconNm} onClick={() => clickOrder('Nm')} />
         name
