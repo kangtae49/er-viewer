@@ -12,6 +12,7 @@ import { useSelectedTreeItemStore } from '@renderer/store/selectedTreeItemStore'
 import { useFolderListOrderStore } from '@renderer/store/folderListOrderStore'
 import { useFolderListStore } from '@renderer/store/folderListStore'
 
+
 function FolderList(): React.ReactElement {
   const selectedItem = useSelectedTreeItemStore((state) => state.selectedItem)
   const folderListOrder = useFolderListOrderStore((state) => state.folderListOrder)

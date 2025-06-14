@@ -130,10 +130,7 @@ function ViewAudio({ selectedItem }: FileViewProps): React.ReactElement {
   return (
     <div className="view-audio">
       <audio ref={mediaRef} controls={true} autoPlay={true}>
-        <source
-          src={selectedItem?.full_path}
-          type={selectedItem?.mt}
-        />
+        <source src={selectedItem?.full_path} type={selectedItem?.mt} />
       </audio>
     </div>
   )
