@@ -1,9 +1,57 @@
-import FolderTree from '@renderer/components/left/contents/FolderTree'
 import React from 'react'
+import FolderTree from '@renderer/components/left/contents/FolderTree'
+import {
+  getNth,
+  getNthOfTreeItems,
+  scrollToItem,
+  selectTreeItem,
+  toggleDirectory
+} from '@renderer/components/left/contents/tree'
+import { useSelectedTreeItemStore } from '@renderer/store/selectedTreeItemStore'
+import { useFolderTreeStore } from '@renderer/store/folderTreeStore'
+import { useFolderTreeRefStore } from '@renderer/store/folderTreeRefStore'
 
 function LeftContent(): React.ReactNode {
+  const folderTree = useFolderTreeStore((state) => state.folderTree)
+  const setFolderTree = useFolderTreeStore((state) => state.setFolderTree)
+  const selectedItem = useSelectedTreeItemStore((state) => state.selectedItem)
+  const setSelectedItem = useSelectedTreeItemStore((state) => state.setSelectedItem)
+  const folderTreeRef = useFolderTreeRefStore((state) => state.folderTreeRef)
+  const onKeyDownTree = async (e: React.KeyboardEvent): Promise<void> => {
+    if (!selectedItem) {
+      return
+    }
+    const [, nth] = getNth(folderTree, selectedItem)
+    if (e.key === 'ArrowDown') {
+      const [newTreeItem] = getNthOfTreeItems(folderTree, nth + 1)
+      if (newTreeItem) {
+        selectTreeItem({ selectedItem, newItem: newTreeItem })
+        setSelectedItem(newTreeItem)
+        await scrollToItem({ folderTree, folderTreeRef, selectedItem: newTreeItem })
+      }
+    } else if (e.key === 'ArrowUp') {
+      const [newTreeItem] = getNthOfTreeItems(folderTree, nth - 1)
+      if (newTreeItem) {
+        selectTreeItem({ selectedItem, newItem: newTreeItem })
+        setSelectedItem(newTreeItem)
+        await scrollToItem({ folderTree, folderTreeRef, selectedItem: newTreeItem })
+      }
+    } else if (e.key === 'ArrowLeft') {
+      if (selectedItem.parent) {
+        selectTreeItem({ selectedItem, newItem: selectedItem.parent })
+        setSelectedItem(selectedItem.parent)
+        await scrollToItem({ folderTree, folderTreeRef, selectedItem: selectedItem.parent })
+      }
+    } else if (e.key === 'Enter' || e.key === ' ' || e.key === 'ArrowRight') {
+      if (folderTree && selectedItem.dir) {
+        await toggleDirectory({ treeItem: selectedItem })
+        setFolderTree([...folderTree])
+      }
+    }
+  }
+
   return (
-    <div className="content">
+    <div className="content" tabIndex={0} onKeyDown={onKeyDownTree}>
       <FolderTree />
     </div>
   )

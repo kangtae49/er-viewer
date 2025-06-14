@@ -82,7 +82,7 @@ export function getNthParent(item: TreeItem | undefined, n: number): TreeItem | 
 export function getNthOfTreeItems(
   treeItems: TreeItem[] | undefined,
   nth: number,
-  curIdx = 0
+  curIdx = -1
 ): [TreeItem | undefined, number] {
   let findTreeItem: TreeItem | undefined = undefined
   if (!treeItems) {
@@ -90,11 +90,37 @@ export function getNthOfTreeItems(
   }
   for (let idxItem = 0; idxItem < treeItems.length; idxItem++) {
     curIdx++
-    if (curIdx - 1 == nth) {
+    if (curIdx == nth) {
       findTreeItem = treeItems[idxItem]
       break
     }
     const [findItem, nextIdx] = getNthOfTreeItems(treeItems[idxItem]?.items, nth, curIdx)
+    findTreeItem = findItem
+    curIdx = nextIdx
+    if (findTreeItem) {
+      break
+    }
+  }
+  console.log(findTreeItem, curIdx)
+  return [findTreeItem, curIdx]
+}
+
+export function getNth(
+  treeItems: TreeItem[] | undefined,
+  item: TreeItem,
+  curIdx = -1
+): [TreeItem | undefined, number] {
+  let findTreeItem: TreeItem | undefined = undefined
+  if (!treeItems) {
+    return [findTreeItem, curIdx]
+  }
+  for (let idxItem = 0; idxItem < treeItems.length; idxItem++) {
+    curIdx++
+    if (treeItems[idxItem] == item) {
+      findTreeItem = treeItems[idxItem]
+      break
+    }
+    const [findItem, nextIdx] = getNth(treeItems[idxItem]?.items, item, curIdx)
     findTreeItem = findItem
     curIdx = nextIdx
     if (findTreeItem) {
@@ -259,5 +285,38 @@ export const renderTreeFromPath = async ({
         }, 100)
       }
     })
+  }
+}
+
+export const toggleDirectory = async ({ treeItem }: { treeItem?: TreeItem }): Promise<void> => {
+  if (treeItem?.dir) {
+    if (!treeItem.items) {
+      const treeItems = await fetchTreeItems({ treeItem })
+      if (!treeItems) {
+        delete treeItem.items
+      }
+    } else {
+      delete treeItem.items
+    }
+  }
+}
+
+export const scrollToItem = async ({
+  folderTree,
+  selectedItem,
+  folderTreeRef
+}: {
+  selectedItem: TreeItem
+  folderTree: FolderTreeStore['folderTree']
+  folderTreeRef: FolderTreeRefStore['folderTreeRef']
+}): Promise<void> => {
+  const [, nth] = getNth(folderTree, selectedItem)
+  const totalCount = getCountOfTreeItems(folderTree)
+  if (document.querySelector('.folder-tree')?.scrollHeight == totalCount * TREE_ITEM_SIZE) {
+    folderTreeRef?.current?.scrollToItem(nth, 'center')
+  } else {
+    setTimeout(() => {
+      folderTreeRef?.current?.scrollToItem(nth, 'center')
+    }, 100)
   }
 }

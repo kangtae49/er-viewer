@@ -3,7 +3,6 @@ import { electronAPI } from '@electron-toolkit/preload'
 
 import path from 'node:path'
 import type { Folder, OptParams, TextContent, HomeType, DiskInfo } from 'napi-bindings'
-// import type {} from ''
 
 const isDev = process.env.NODE_ENV === 'development'
 console.log(`isDev: ${isDev}`)

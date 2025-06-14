@@ -3,11 +3,10 @@ import { TreeItem } from '@renderer/types'
 import { FontAwesomeIcon as Icon } from '@fortawesome/react-fontawesome'
 import { faFolder, faFile } from '@fortawesome/free-solid-svg-icons'
 import {
-  fetchTreeItems,
   selectTreeItem,
   getNthParent,
   SEP,
-  TREE_DEPT_SIZE
+  TREE_DEPT_SIZE, toggleDirectory
 } from '@renderer/components/left/contents/tree'
 import { useFolderTreeStore } from '@renderer/store/folderTreeStore'
 import { useSelectedTreeItemStore } from '@renderer/store/selectedTreeItemStore'
@@ -26,14 +25,15 @@ function FolderTreeItem({ treeItem, style }: Prop): React.ReactElement {
     console.log('click', treeItem)
     if (folderTree) {
       if (treeItem?.dir) {
-        if (!treeItem.items) {
-          const treeItems = await fetchTreeItems({ treeItem })
-          if (!treeItems) {
-            delete treeItem.items
-          }
-        } else {
-          delete treeItem.items
-        }
+        await toggleDirectory({ treeItem })
+        // if (!treeItem.items) {
+        //   const treeItems = await fetchTreeItems({ treeItem })
+        //   if (!treeItems) {
+        //     delete treeItem.items
+        //   }
+        // } else {
+        //   delete treeItem.items
+        // }
         setFolderTree([...folderTree])
       } else {
         clickLabel(treeItem)

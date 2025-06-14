@@ -29,8 +29,11 @@
     "files": [
       "out/**/*",
       "dist/**/*",
-      "package.json"
+      "package.json",
+      "!**/node_modules/*/{test,__tests__,tests}/**",
+      "!**/*.map"
     ],
+    "asar": true,
     "win": {
       "target": "nsis"
     },
