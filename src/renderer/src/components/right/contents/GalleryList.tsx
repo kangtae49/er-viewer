@@ -22,19 +22,49 @@ function GalleryList(): React.ReactElement {
   const sliderPos = useFolderListSliderStore((state) => state.sliderPos)
   const setSliderPos = useFolderListSliderStore((state) => state.setSliderPos)
   const onChangeSliderX = (event: React.ChangeEvent<HTMLInputElement>): void => {
+    const maxX = Number((document.querySelector('.slider-w input') as HTMLInputElement).max)
+    const maxY = Number((document.querySelector('.slider-h input') as HTMLInputElement).max)
     const x = Number(event.target.value)
-    const newPos = { x: x, y: sliderPos.y }
+    const newPos = { ...sliderPos, x, maxX, maxY }
+    if (newPos.checked) {
+      newPos.y = Number(event.target.value)
+    }
+    if (newPos.x > newPos.maxX) {
+      newPos.x = newPos.maxX
+    }
+    if (newPos.y > newPos.maxY) {
+      newPos.y = newPos.maxY
+    }
     if (newPos != sliderPos) {
       setSliderPos(newPos)
     }
   }
   const onChangeSliderY = (event: React.ChangeEvent<HTMLInputElement>): void => {
+    const maxX = Number((document.querySelector('.slider-w input') as HTMLInputElement).max)
+    const maxY = Number((document.querySelector('.slider-h input') as HTMLInputElement).max)
     const y = Number(event.target.value)
-    const newPos = { y: y, x: sliderPos.x }
+    const newPos = { ...sliderPos, y, maxX, maxY }
+    if (newPos.checked) {
+      newPos.x = Number(event.target.value)
+    }
+    if (newPos.x > newPos.maxX) {
+      newPos.x = newPos.maxX
+    }
+    if (newPos.y > newPos.maxY) {
+      newPos.y = newPos.maxY
+    }
     if (newPos != sliderPos) {
       setSliderPos(newPos)
     }
   }
+  const onChangeSliderChecked = (event: React.ChangeEvent<HTMLInputElement>): void => {
+    const checked = event.target.checked
+    const newPos = { ...sliderPos, checked }
+    if (newPos != sliderPos) {
+      setSliderPos(newPos)
+    }
+  }
+
   useEffect(() => {
     fetchTreeItems({ treeItem: selectedItem, appendChildItems: false, folderListOrder }).then(
       (fetchItems) => setFolderList(fetchItems)
@@ -63,7 +93,11 @@ function GalleryList(): React.ReactElement {
             <>
               <div className="slider-top">
                 <div className="slider-chk">
-                  <input type="checkbox" />
+                  <input
+                    type="checkbox"
+                    checked={sliderPos.checked}
+                    onChange={onChangeSliderChecked}
+                  />
                 </div>
                 <div className="slider-w">
                   <input

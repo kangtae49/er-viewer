@@ -1,5 +1,10 @@
 import React, { useEffect, useRef } from 'react'
 import { TreeItem } from '@renderer/types'
+import { formatFileSize, toDate } from '@renderer/components/utils'
+import { useFolderListVisibleColsStore } from '@renderer/store/folderListVisibleColsStore'
+import { FontAwesomeIcon as Icon } from '@fortawesome/react-fontawesome'
+import { faFile, faFolder, faRocket } from '@fortawesome/free-solid-svg-icons'
+import { useSelectedTreeItemStore } from '@renderer/store/selectedTreeItemStore'
 
 type GalleryListItemProp = {
   style: React.CSSProperties
@@ -38,9 +43,35 @@ interface FileViewProps {
 }
 
 function ViewNm({ item, sliderPos }: FileViewProps): React.ReactElement {
+  const setSelectedItem = useSelectedTreeItemStore((state) => state.setSelectedItem)
+  const folderListVisibleCols = useFolderListVisibleColsStore(
+    (state) => state.folderListVisibleCols
+  )
+  const fullPath = item?.full_path
+  const nm = item?.nm
+  const sz = formatFileSize(item?.sz)
+  const ext = item?.dir ? '' : item?.ext?.slice(-10) || ''
+  const tm = toDate(item?.tm)
   return (
-    <div className="col view-nm" style={{ width: sliderPos.x, height: sliderPos.y }}>
-      {item?.nm}
+    <div
+      className="col view-nm"
+      style={{ width: sliderPos.x, height: sliderPos.y }}
+      title={item?.nm}
+    >
+      <div className="nm">
+        <div className="icon">
+          <Icon icon={faRocket} onClick={() => window.api.shellOpenPath(fullPath)} />
+        </div>
+        <div className="icon" onClick={() => window.api.shellShowItemInFolder(fullPath)}>
+          <Icon icon={item?.dir ? faFolder : faFile} />
+        </div>
+        <div className="label" title={fullPath} onClick={() => setSelectedItem(item)}>
+          {nm}
+        </div>
+      </div>
+      {folderListVisibleCols.includes('Sz') && <div className="sz">{sz}</div>}
+      {folderListVisibleCols.includes('Ext') && <div className="ext">{ext}</div>}
+      {folderListVisibleCols.includes('Tm') && <div className="tm">{tm}</div>}
     </div>
   )
 }
@@ -51,8 +82,12 @@ function ViewNone({ sliderPos }: FileViewProps): React.ReactElement {
 
 function ViewImg({ item, sliderPos }: FileViewProps): React.ReactElement {
   return (
-    <div className="col view-img" style={{ width: sliderPos.x, height: sliderPos.y }}>
-      <img src={item?.full_path} alt={item?.full_path} loading="lazy" />
+    <div
+      className="col view-img"
+      style={{ width: sliderPos.x, height: sliderPos.y }}
+      title={item?.nm}
+    >
+      <img src={item?.full_path} loading="lazy" alt={item?.full_path} />
     </div>
   )
 }
@@ -67,7 +102,11 @@ function ViewAudio({ item, sliderPos }: FileViewProps): React.ReactElement {
     }
   })
   return (
-    <div className="col view-audio" style={{ width: sliderPos.x, height: sliderPos.y }}>
+    <div
+      className="col view-audio"
+      style={{ width: sliderPos.x, height: sliderPos.y }}
+      title={item?.nm}
+    >
       <audio ref={mediaRef} controls={true} autoPlay={false}>
         <source src={item?.full_path} type={item?.mt} />
       </audio>
@@ -85,7 +124,11 @@ function ViewVideo({ item, sliderPos }: FileViewProps): React.ReactElement {
     }
   })
   return (
-    <div className="col view-video" style={{ width: sliderPos.x, height: sliderPos.y }}>
+    <div
+      className="col view-video"
+      style={{ width: sliderPos.x, height: sliderPos.y }}
+      title={item?.nm}
+    >
       <video ref={mediaRef} controls={true} autoPlay={false}>
         <source src={item?.full_path} type={item?.mt} />
       </video>
