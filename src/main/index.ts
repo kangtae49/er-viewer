@@ -1,8 +1,8 @@
-import { app, shell, BrowserWindow, ipcMain } from 'electron'
+import { app, BrowserWindow, ipcMain, shell } from 'electron'
 import { join } from 'path'
-import { electronApp, optimizer, is } from '@electron-toolkit/utils'
+import fs from 'fs'
+import { electronApp, is, optimizer } from '@electron-toolkit/utils'
 import icon from '../../resources/icon.png?asset'
-
 function createWindow(): void {
   // Create the browser window.
   const mainWindow = new BrowserWindow({
@@ -14,12 +14,15 @@ function createWindow(): void {
     webPreferences: {
       preload: join(__dirname, '../preload/index.js'),
       sandbox: false,
-      webSecurity: false
+      webSecurity: false,
+      contextIsolation: false,
+      nodeIntegration: true
     }
   })
 
   mainWindow.on('ready-to-show', () => {
     mainWindow.show()
+    // mainWindow.webContents.openDevTools({ mode: 'detach' })
   })
 
   mainWindow.webContents.setWindowOpenHandler((details) => {
@@ -49,6 +52,10 @@ function createWindow(): void {
       child.loadURL(url)
     }
   })
+
+  ipcMain.on('open-devtools', () => {
+    mainWindow?.webContents.openDevTools({ mode: 'detach' })
+  })
 }
 
 // This method will be called when Electron has finished
@@ -75,6 +82,10 @@ app.whenReady().then(() => {
     // dock icon is clicked and there are no other windows open.
     if (BrowserWindow.getAllWindows().length === 0) createWindow()
   })
+})
+
+ipcMain.handle('open-file', (_event, filePath: string) => {
+  return fs.readFileSync(filePath, 'utf-8')
 })
 
 // Quit when all windows are closed, except on macOS. There, it's common

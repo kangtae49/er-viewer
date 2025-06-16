@@ -81,13 +81,19 @@ function ViewNone({ sliderPos }: FileViewProps): React.ReactElement {
 }
 
 function ViewImg({ item, sliderPos }: FileViewProps): React.ReactElement {
+  const setSelectedItem = useSelectedTreeItemStore((state) => state.setSelectedItem)
   return (
     <div
       className="col view-img"
       style={{ width: sliderPos.x, height: sliderPos.y }}
       title={item?.nm}
     >
-      <img src={item?.full_path} loading="lazy" alt={item?.full_path} />
+      <img
+        src={item?.full_path}
+        loading="lazy"
+        alt={item?.full_path}
+        onClick={() => setSelectedItem(item)}
+      />
     </div>
   )
 }

@@ -1,32 +1,48 @@
 import React, { useEffect, useRef, useState } from 'react'
-import { TreeItem } from '@renderer/types'
+import { FileViewType, TreeItem } from '@renderer/types'
 import { ShadowDomWrapper } from '@renderer/components/right/contents/ShadowDomWrapper'
+import * as monaco from 'monaco-editor'
+import { formatFileSize } from '@renderer/components/utils'
+
+self.MonacoEnvironment = {
+  getWorkerUrl(_, label) {
+    if (label === 'json') {
+      return './src/assets/monaco-editor/esm/vs/language/json/json.worker.js'
+    }
+    if (label === 'css') {
+      return './src/assets/monaco-editor/esm/vs/language/css/css.worker.js'
+    }
+    if (label === 'typescript' || label === 'javascript') {
+      return './src/assets/monaco-editor/esm/vs/language/typescript/ts.worker.js'
+    }
+    return './src/assets/monaco-editor/esm/vs/editor/editor.worker.js'
+  }
+}
 
 interface FileViewProps {
   selectedItem?: TreeItem | undefined
 }
-type FileViewType = 'Img' | 'Embed' | 'Html' | 'Iframe' | 'Text' | 'Video' | 'Audio' | 'None'
 
 function FileView({ selectedItem }: FileViewProps): React.ReactElement {
   let fileViewType: FileViewType
 
   const sz = selectedItem?.sz || 0
-  if (selectedItem?.mt?.startsWith('image/')) {
+  if (['exe', 'com', 'msi', 'dll', 'zip'].includes(selectedItem?.ext || '')) {
+    fileViewType = 'None'
+  } else if (selectedItem?.mt?.startsWith('image/')) {
     fileViewType = 'Img'
   } else if (selectedItem?.mt?.endsWith('/pdf')) {
     fileViewType = 'Embed'
   } else if (selectedItem?.mt?.endsWith('/html')) {
     fileViewType = 'Html'
-  } else if (selectedItem?.mt?.endsWith('/json')) {
-    fileViewType = 'Iframe'
-  } else if (selectedItem?.mt?.endsWith('/xml')) {
-    fileViewType = 'Text'
   } else if (selectedItem?.mt?.startsWith('audio/') && sz > 1024 * 500) {
     fileViewType = 'Audio'
   } else if (selectedItem?.mt?.startsWith('video/') && sz > 1024 * 500) {
     fileViewType = 'Video'
-  } else if (sz < 1024 * 1024 * 5) {
-    fileViewType = 'Text'
+  } else if (isMonacoFile(selectedItem?.ext) && sz <= 5 * 1024 * 1024) {
+    fileViewType = 'Monaco'
+  } else if (sz <= 5 * 1024 * 1024) {
+    fileViewType = 'Monaco'
   } else {
     fileViewType = 'None'
   }
@@ -40,14 +56,16 @@ function FileView({ selectedItem }: FileViewProps): React.ReactElement {
             return <ViewEmbed selectedItem={selectedItem} />
           case 'Html':
             return <ViewHtml selectedItem={selectedItem} />
-          case 'Iframe':
-            return <ViewIframe selectedItem={selectedItem} />
-          case 'Text':
-            return <ViewText selectedItem={selectedItem} />
+          // case 'Iframe':
+          //   return <ViewIframe selectedItem={selectedItem} />
+          // case 'Text':
+          //   return <ViewText selectedItem={selectedItem} />
           case 'Audio':
             return <ViewAudio selectedItem={selectedItem} />
           case 'Video':
             return <ViewVideo selectedItem={selectedItem} />
+          case 'Monaco':
+            return <ViewMonaco selectedItem={selectedItem} />
           default:
             return <ViewNone selectedItem={selectedItem} />
         }
@@ -92,30 +110,30 @@ function ViewHtml({ selectedItem }: FileViewProps): React.ReactElement {
     </ShadowDomWrapper>
   )
 }
-function ViewIframe({ selectedItem }: FileViewProps): React.ReactElement {
-  return (
-    <div className="view-iframe">
-      <iframe src={selectedItem?.full_path}></iframe>
-    </div>
-  )
-}
-function ViewText({ selectedItem }: FileViewProps): React.ReactElement {
-  const [text, setText] = useState('')
-
-  useEffect(() => {
-    const fetchText = async (): Promise<string> => {
-      if (selectedItem?.full_path) {
-        const textContent = await window.api.readTextFile(selectedItem.full_path)
-        return textContent.text || ''
-      } else {
-        return ''
-      }
-    }
-    fetchText().then((txt) => setText(txt))
-  }, [selectedItem?.full_path])
-
-  return <div className="view-text">{text}</div>
-}
+// function ViewIframe({ selectedItem }: FileViewProps): React.ReactElement {
+//   return (
+//     <div className="view-iframe">
+//       <iframe src={selectedItem?.full_path}></iframe>
+//     </div>
+//   )
+// }
+// function ViewText({ selectedItem }: FileViewProps): React.ReactElement {
+//   const [text, setText] = useState('')
+//
+//   useEffect(() => {
+//     const fetchText = async (): Promise<string> => {
+//       if (selectedItem?.full_path) {
+//         const textContent = await window.api.readTextFile(selectedItem.full_path)
+//         return textContent.text || ''
+//       } else {
+//         return ''
+//       }
+//     }
+//     fetchText().then((txt) => setText(txt))
+//   }, [selectedItem?.full_path])
+//
+//   return <div className="view-text">{text}</div>
+// }
 
 function ViewAudio({ selectedItem }: FileViewProps): React.ReactElement {
   console.log('view-audio')
@@ -155,7 +173,90 @@ function ViewVideo({ selectedItem }: FileViewProps): React.ReactElement {
 }
 
 function ViewNone({ selectedItem }: FileViewProps): React.ReactElement {
-  return <div>{selectedItem?.full_path}</div>
+  return (
+    <div>
+      <h3>{selectedItem?.nm}</h3>
+      <h3>{formatFileSize(selectedItem?.sz)}</h3>
+    </div>
+  )
+}
+
+function ViewMonaco({ selectedItem }: FileViewProps): React.ReactElement {
+  const editorRef = useRef<HTMLDivElement>(null)
+  const monacoEditorRef = useRef<monaco.editor.IStandaloneCodeEditor | null>(null)
+  const [content, setContent] = useState<string | null>(null)
+
+  useEffect(() => {
+    if (!selectedItem) {
+      return
+    }
+    window.api
+      .readTextFile(selectedItem.full_path)
+      .then((txtContent) => {
+        setContent(txtContent?.text || '')
+      })
+      .catch((e) => {
+        console.error(e)
+        setContent('')
+      })
+  }, [selectedItem])
+
+  useEffect(() => {
+    if (selectedItem && content && editorRef && editorRef.current) {
+      if (monacoEditorRef?.current) {
+        monacoEditorRef.current.dispose()
+      }
+      monacoEditorRef.current = monaco.editor.create(editorRef.current, {
+        // model,
+        value: content,
+        // language: 'plaintext',
+        language: getLanguage(selectedItem?.ext),
+        theme: 'vs',
+        readOnly: true,
+        automaticLayout: true
+      })
+      // editorRef.current.innerHTML = ''
+      // monacoEditorRef.current?.dispose()
+      // const model = monaco.editor.createModel(content, 'plaintext')
+      // const model = monaco.editor.createModel(content, getLanguage(selectedItem?.ext))
+      // return () => {
+      //   monacoEditorRef.current?.dispose()
+      //   // editorRef.current?.innerHTML = ''
+      // }
+    }
+    // if (!content) {
+    //   return
+    // }
+    // if (!editorRef.current) {
+    //   return
+    // }
+    // (document.querySelector('.editor-container') as HTMLDivElement).innerHTML = ''
+    // monaco.editor.setModelLanguage(model, getLanguage(selectedItem?.ext))
+  }, [content, selectedItem])
+
+  return <div className="view-monaco" ref={editorRef} style={{ width: '100%', height: '100%' }} />
+}
+
+function isMonacoFile(ext?: string): boolean {
+  if (!ext) {
+    return false
+  }
+  const languages = monaco.languages.getLanguages()
+  const lang = languages.find((lang) => lang.extensions?.includes(`.${ext}`))
+  return !!lang
+}
+
+function getLanguage(ext?: string): string {
+  let language = 'plaintext'
+  if (!ext) {
+    return 'plaintext'
+  }
+  const languages = monaco.languages.getLanguages()
+  const lang = languages.find((lang) => lang.extensions?.includes(`.${ext}`))
+  if (lang) {
+    language = lang.id
+  }
+  return language
 }
 
 export default FileView

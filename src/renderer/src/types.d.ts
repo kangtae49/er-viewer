@@ -23,3 +23,13 @@ export type FolderListOrder = {
 }
 export type FolderListOrderKey = 'Nm' | 'Ext' | 'Tm' | 'Sz'
 export type FolderListOrderVal = 'Asc' | 'Desc'
+export type FileViewType =
+  | 'Img'
+  | 'Embed'
+  | 'Html'
+  | 'Iframe'
+  | 'Text'
+  | 'Monaco'
+  | 'Video'
+  | 'Audio'
+  | 'None'

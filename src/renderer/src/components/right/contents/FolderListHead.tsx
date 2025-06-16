@@ -80,7 +80,7 @@ function FolderListHead(): React.ReactElement {
   return (
     <div className="folder-head">
       {selectedItem?.dir && (
-        <div>
+        <div className="dir-types">
           <Icon
             className={directoryViewType == 'FolderList' ? 'selected' : ''}
             icon={faList}
@@ -93,7 +93,7 @@ function FolderListHead(): React.ReactElement {
           />
         </div>
       )}
-      <div>
+      <div className="info">
         {total.toLocaleString()} files {formatFileSize(size)}
       </div>
       <div className="nm">

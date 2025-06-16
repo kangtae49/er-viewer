@@ -101,7 +101,6 @@ export function getNthOfTreeItems(
       break
     }
   }
-  console.log(findTreeItem, curIdx)
   return [findTreeItem, curIdx]
 }
 
@@ -312,7 +311,9 @@ export const scrollToItem = async ({
 }): Promise<void> => {
   const [, nth] = getNth(folderTree, selectedItem)
   const totalCount = getCountOfTreeItems(folderTree)
-  if (document.querySelector('.folder-tree')?.scrollHeight == totalCount * TREE_ITEM_SIZE) {
+  let scrollHeight = document.querySelector('.folder-tree')?.scrollHeight || 0
+  scrollHeight = Math.floor(scrollHeight / TREE_ITEM_SIZE) * TREE_ITEM_SIZE
+  if (scrollHeight == totalCount * TREE_ITEM_SIZE) {
     folderTreeRef?.current?.scrollToItem(nth, 'center')
   } else {
     setTimeout(() => {

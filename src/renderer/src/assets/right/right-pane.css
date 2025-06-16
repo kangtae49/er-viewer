@@ -50,6 +50,8 @@
     align-items: center;
 }
 
+.content .folder-head .dir-types {flex: 0 0 40px; text-align: center; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;}
+.content .folder-head .info {flex: 0 0 150px; text-align: center; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;}
 .content .folder-head .nm { flex: 1 1 auto; text-align: center; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;}
 .content .folder-head .sz { flex: 0 0 80px; text-align: center; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;}
 .content .folder-head .ext { flex: 0 0 60px; text-align: center; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;}
@@ -75,8 +77,9 @@
 .content .view-audio audio { width: 100%; }
 .content .view-video { display: flex; justify-content: center; align-items: center; width: 100%; height: 100%;}
 .content .view-video video { width: 100%; height: 100%; }
+.content .view-monaco {width: 100%; height: 100%;}
 
-.content .view-iframe { display: flex; justify-content: center; align-items: center; width: 100%; }
+.content .view-iframe { display: flex; justify-content: center; align-items: center; width: 100%; height: 100%; }
 .content .view-iframe iframe { width: 100%; height: 100%; border:none; }
 
 .right-top { display: flex; width: 100%; height: 25px; margin:0; padding: 0 0 0 5px; background-color: white;}

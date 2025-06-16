@@ -48,11 +48,13 @@
   "dependencies": {
     "@electron-toolkit/preload": "^3.0.1",
     "@electron-toolkit/utils": "^4.0.0",
+    "@electron/remote": "^2.1.2",
     "@fortawesome/fontawesome-svg-core": "^6.7.2",
     "@fortawesome/free-solid-svg-icons": "^6.7.2",
     "@fortawesome/react-fontawesome": "^0.2.2",
     "@rexxars/react-split-pane": "^1.0.0",
     "electron-updater": "^6.3.9",
+    "monaco-editor": "^0.52.2",
     "napi-bindings": "file:/./napi-folder/bindings",
     "react-virtualized-auto-sizer": "^1.0.26",
     "react-window": "^1.8.11",
@@ -78,6 +80,7 @@
     "react": "^19.1.0",
     "react-dom": "^19.1.0",
     "typescript": "^5.8.3",
-    "vite": "^6.2.6"
+    "vite": "^6.2.6",
+    "vite-plugin-monaco-editor": "^1.1.0"
   }
 }

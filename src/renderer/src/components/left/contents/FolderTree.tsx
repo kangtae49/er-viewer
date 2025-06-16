@@ -8,7 +8,6 @@ import type { FolderTree } from '@renderer/types'
 import { TREE_ITEM_SIZE } from '@renderer/components/left/contents/tree'
 import {
   fetchDisks,
-  // fetchTreeItems,
   getNthOfTreeItems,
   getCountOfTreeItems
 } from '@renderer/components/left/contents/tree'
@@ -18,7 +17,6 @@ function FolderTree(): React.ReactElement {
   const setFolderTree = useFolderTreeStore((state) => state.setFolderTree)
   const setFolderTreeRef = useFolderTreeRefStore((state) => state.setFolderTreeRef)
   const listRef = useRef<List>(null)
-
 
   useEffect(() => {
     setFolderTreeRef(listRef)

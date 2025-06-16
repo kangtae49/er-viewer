@@ -17,9 +17,11 @@ const { FolderApi } = require(nativePath)
 export type HomePathMap = Record<HomeType, string>
 
 export interface FolderAPI {
+  getResourcesPath: () => string
   getCurPath: () => Promise<string>
   readFolder: (params: OptParams) => Promise<Folder>
   readTextFile: (pathStr: string) => Promise<TextContent>
+  openFile: (pathStr: string) => Promise<string>
   setState: <T>(key: string, val: T) => Promise<T>
   getState: <T>(key: string, default_val: object | undefined) => Promise<T>
   getHomeDir: () => Promise<HomePathMap>
@@ -31,6 +33,7 @@ export interface FolderAPI {
 
 // Custom APIs for renderer
 const api: FolderAPI = {
+  getResourcesPath: () => process.resourcesPath,
   getCurPath: async (): Promise<string> => {
     return await ipcRenderer.invoke('get-cur-path')
   },
@@ -39,6 +42,9 @@ const api: FolderAPI = {
   },
   readTextFile: async (pathStr: string): Promise<TextContent> => {
     return new FolderApi().readText(pathStr).then(JSON.parse)
+  },
+  openFile: (pathStr: string): Promise<string> => {
+    return ipcRenderer.invoke('open-file', pathStr)
   },
   setState: async <T>(key: string, val: T): Promise<T> => {
     let str_val: string | T
