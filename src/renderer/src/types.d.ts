@@ -32,4 +32,5 @@ export type FileViewType =
   | 'Monaco'
   | 'Video'
   | 'Audio'
+  | 'Empty'
   | 'None'

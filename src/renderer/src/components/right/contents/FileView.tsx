@@ -28,7 +28,9 @@ function FileView({ selectedItem }: FileViewProps): React.ReactElement {
   let fileViewType: FileViewType
 
   const sz = selectedItem?.sz || 0
-  if (['exe', 'com', 'msi', 'dll', 'zip'].includes(selectedItem?.ext || '')) {
+  if (sz == 0) {
+    fileViewType = 'Empty'
+  } else if (['exe', 'com', 'msi', 'dll', 'zip'].includes(selectedItem?.ext || '')) {
     fileViewType = 'None'
   } else if (selectedItem?.mt?.startsWith('image/')) {
     fileViewType = 'Img'
@@ -51,6 +53,8 @@ function FileView({ selectedItem }: FileViewProps): React.ReactElement {
     <>
       {(() => {
         switch (fileViewType) {
+          case 'Empty':
+            return <ViewEmpty selectedItem={selectedItem} />
           case 'Img':
             return <ViewImg selectedItem={selectedItem} />
           case 'Embed':
@@ -169,6 +173,15 @@ function ViewVideo({ selectedItem }: FileViewProps): React.ReactElement {
       <video ref={mediaRef} controls={true} autoPlay={true}>
         <source src={selectedItem?.full_path} type={selectedItem?.mt} />
       </video>
+    </div>
+  )
+}
+
+function ViewEmpty({ selectedItem }: FileViewProps): React.ReactElement {
+  return (
+    <div>
+      <h3>{selectedItem?.nm}</h3>
+      <h3>{formatFileSize(selectedItem?.sz)}</h3>
     </div>
   )
 }
