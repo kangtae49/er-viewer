@@ -34,7 +34,8 @@
       "!**/*.map",
       "!dist/*.exe",
       "!**/win-unpacked/**",
-      "!**/win-*/**"
+      "!**/win-*/**",
+      "!src/renderer/src/assets/monaco-editor/**"
     ],
     "asar": true,
     "win": {
@@ -44,9 +45,9 @@
       "./napi-folder/index.js",
       "./napi-folder/napi-folder.win32-x64-msvc.node",
       {
-        "from": "./resources/monaco-editor",
+        "from": "./node_modules/monaco-editor",
         "to": "monaco-editor",
-        "filter": ["**/*.js"]
+        "filter": ["esm/**/*.js"]
       }
     ]
   },
