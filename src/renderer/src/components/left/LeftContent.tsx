@@ -27,20 +27,20 @@ function LeftContent(): React.ReactNode {
       if (newTreeItem) {
         selectTreeItem({ selectedItem, newItem: newTreeItem })
         setSelectedItem(newTreeItem)
-        await scrollToItem({ folderTree, folderTreeRef, selectedItem: newTreeItem })
+        await scrollToItem({ folderTree, selectedItem: newTreeItem, folderTreeRef })
       }
     } else if (e.key === 'ArrowUp') {
       const [newTreeItem] = getNthOfTreeItems(folderTree, nth - 1)
       if (newTreeItem) {
         selectTreeItem({ selectedItem, newItem: newTreeItem })
         setSelectedItem(newTreeItem)
-        await scrollToItem({ folderTree, folderTreeRef, selectedItem: newTreeItem })
+        await scrollToItem({ folderTree, selectedItem: newTreeItem, folderTreeRef })
       }
     } else if (e.key === 'ArrowLeft') {
       if (selectedItem.parent) {
         selectTreeItem({ selectedItem, newItem: selectedItem.parent })
         setSelectedItem(selectedItem.parent)
-        await scrollToItem({ folderTree, folderTreeRef, selectedItem: selectedItem.parent })
+        await scrollToItem({ folderTree, selectedItem: selectedItem.parent, folderTreeRef })
       }
     } else if (e.key === 'Enter' || e.key === ' ' || e.key === 'ArrowRight') {
       if (folderTree && selectedItem.dir) {

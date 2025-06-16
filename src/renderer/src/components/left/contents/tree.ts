@@ -313,11 +313,25 @@ export const scrollToItem = async ({
   const totalCount = getCountOfTreeItems(folderTree)
   let scrollHeight = document.querySelector('.folder-tree')?.scrollHeight || 0
   scrollHeight = Math.floor(scrollHeight / TREE_ITEM_SIZE) * TREE_ITEM_SIZE
+  console.log('scroll:', scrollHeight, totalCount, totalCount * TREE_ITEM_SIZE, nth)
   if (scrollHeight == totalCount * TREE_ITEM_SIZE) {
-    folderTreeRef?.current?.scrollToItem(nth, 'center')
+    // console.log('scroll:', nth, folderTreeRef?.current)
+    // const folderTree = document.querySelector('.folder-tree') as HTMLDivElement
+    // folderTree.scrollTo({
+    //   top: nth * TREE_ITEM_SIZE
+    // })
+    requestAnimationFrame(() => {
+      folderTreeRef?.current?.scrollToItem(nth, 'auto')
+    })
   } else {
     setTimeout(() => {
-      folderTreeRef?.current?.scrollToItem(nth, 'center')
+      console.log('setTimeout scroll:', nth, folderTreeRef?.current)
+      // const folderTree = document.querySelector('.folder-tree') as HTMLDivElement
+      // folderTree.scrollTo({
+      //   top: nth * TREE_ITEM_SIZE,
+      //   behavior: 'smooth'
+      // })
+      folderTreeRef?.current?.scrollToItem(nth, 'auto')
     }, 100)
   }
 }

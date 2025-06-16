@@ -6,6 +6,7 @@ import { formatFileSize } from '@renderer/components/utils'
 
 self.MonacoEnvironment = {
   getWorkerUrl(_, label) {
+    // console.log('getWorkerUrl', label)
     if (label === 'json') {
       return './src/assets/monaco-editor/esm/vs/language/json/json.worker.js'
     }
@@ -136,7 +137,7 @@ function ViewHtml({ selectedItem }: FileViewProps): React.ReactElement {
 // }
 
 function ViewAudio({ selectedItem }: FileViewProps): React.ReactElement {
-  console.log('view-audio')
+  // console.log('view-audio')
   const mediaRef = useRef<HTMLAudioElement>(null)
 
   useEffect(() => {
@@ -252,6 +253,7 @@ function getLanguage(ext?: string): string {
     return 'plaintext'
   }
   const languages = monaco.languages.getLanguages()
+  // console.log('languages', languages)
   const lang = languages.find((lang) => lang.extensions?.includes(`.${ext}`))
   if (lang) {
     language = lang.id
