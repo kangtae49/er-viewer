@@ -7,16 +7,22 @@ import { formatFileSize } from '@renderer/components/utils'
 self.MonacoEnvironment = {
   getWorkerUrl(_, label) {
     // console.log('getWorkerUrl', label)
+    const isDev = import.meta.env.MODE === 'development'
+    const basePath = isDev ? './src/assets' : window.api.getResourcesPath()
+
     if (label === 'json') {
-      return './src/assets/monaco-editor/esm/vs/language/json/json.worker.js'
+      return `${basePath}/monaco-editor/esm/vs/language/json/json.worker.js`
     }
     if (label === 'css') {
-      return './src/assets/monaco-editor/esm/vs/language/css/css.worker.js'
+      return `${basePath}/monaco-editor/esm/vs/language/css/css.worker.js`
+    }
+    if (label === 'html') {
+      return `${basePath}/monaco-editor/esm/vs/language/html/html.worker.js`
     }
     if (label === 'typescript' || label === 'javascript') {
-      return './src/assets/monaco-editor/esm/vs/language/typescript/ts.worker.js'
+      return `${basePath}/monaco-editor/esm/vs/language/typescript/ts.worker.js`
     }
-    return './src/assets/monaco-editor/esm/vs/editor/editor.worker.js'
+    return `${basePath}/monaco-editor/esm/vs/editor/editor.worker.js`
   }
 }
 

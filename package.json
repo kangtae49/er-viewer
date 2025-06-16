@@ -42,7 +42,12 @@
     },
     "extraResources": [
       "./napi-folder/index.js",
-      "./napi-folder/napi-folder.win32-x64-msvc.node"
+      "./napi-folder/napi-folder.win32-x64-msvc.node",
+      {
+        "from": "./resources/monaco-editor",
+        "to": "monaco-editor",
+        "filter": ["**/*.js"]
+      }
     ]
   },
   "dependencies": {
