@@ -26,7 +26,7 @@ export const selectTreeItem = ({
   selectedItem,
   newItem
 }: {
-  selectedItem: TreeItem | undefined
+  selectedItem?: TreeItem
   newItem: TreeItem | undefined
 }): void => {
   if (selectedItem) {
@@ -271,18 +271,21 @@ export const renderTreeFromPath = async ({
       setFolderTree(disks)
     })
   } else {
-    fetchFolderTree({ fullPath }).then(([newFolderTree, newSelectedItem, newSelectedIndex]) => {
-      setFolderTree([...newFolderTree])
-      selectTreeItem({ selectedItem, newItem: newSelectedItem })
-      setSelectedItem(newSelectedItem)
-      const totalCount = getCountOfTreeItems(newFolderTree)
-      if (document.querySelector('.folder-tree')?.scrollHeight == totalCount * TREE_ITEM_SIZE) {
-        folderTreeRef?.current?.scrollToItem(newSelectedIndex, 'center')
-      } else {
-        setTimeout(() => {
-          folderTreeRef?.current?.scrollToItem(newSelectedIndex, 'center')
-        }, 100)
+    fetchFolderTree({ fullPath }).then(([newFolderTree, newSelectedItem]) => {
+      if (newFolderTree && newSelectedItem) {
+        setFolderTree([...newFolderTree])
+        selectTreeItem({ selectedItem, newItem: newSelectedItem })
+        setSelectedItem(newSelectedItem)
+        scrollToItem({ selectedItem: newSelectedItem, folderTree: newFolderTree, folderTreeRef })
       }
+      // const totalCount = getCountOfTreeItems(newFolderTree)
+      // if (document.querySelector('.folder-tree')?.scrollHeight == totalCount * TREE_ITEM_SIZE) {
+      //   folderTreeRef?.current?.scrollToItem(newSelectedIndex, 'center')
+      // } else {
+      //   setTimeout(() => {
+      //     folderTreeRef?.current?.scrollToItem(newSelectedIndex, 'center')
+      //   }, 100)
+      // }
     })
   }
 }
@@ -314,23 +317,18 @@ export const scrollToItem = async ({
   let scrollHeight = document.querySelector('.folder-tree')?.scrollHeight || 0
   scrollHeight = Math.floor(scrollHeight / TREE_ITEM_SIZE) * TREE_ITEM_SIZE
   console.log('scroll:', scrollHeight, totalCount, totalCount * TREE_ITEM_SIZE, nth)
+  // setTimeout(() => {
+  //   console.log('setTimeout scroll:', nth, folderTreeRef?.current)
+  //   folderTreeRef?.current?.scrollToItem(nth, 'auto')
+  // }, 500)
+
   if (scrollHeight == totalCount * TREE_ITEM_SIZE) {
-    // console.log('scroll:', nth, folderTreeRef?.current)
-    // const folderTree = document.querySelector('.folder-tree') as HTMLDivElement
-    // folderTree.scrollTo({
-    //   top: nth * TREE_ITEM_SIZE
-    // })
     requestAnimationFrame(() => {
       folderTreeRef?.current?.scrollToItem(nth, 'auto')
     })
   } else {
     setTimeout(() => {
       console.log('setTimeout scroll:', nth, folderTreeRef?.current)
-      // const folderTree = document.querySelector('.folder-tree') as HTMLDivElement
-      // folderTree.scrollTo({
-      //   top: nth * TREE_ITEM_SIZE,
-      //   behavior: 'smooth'
-      // })
       folderTreeRef?.current?.scrollToItem(nth, 'auto')
     }, 100)
   }

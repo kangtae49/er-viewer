@@ -1,5 +1,5 @@
 import { app, BrowserWindow, ipcMain, shell } from 'electron'
-import { join } from 'path'
+import { join, resolve } from 'path'
 import fs from 'fs'
 import { electronApp, is, optimizer } from '@electron-toolkit/utils'
 import icon from '../../resources/icon.png?asset'
@@ -87,6 +87,26 @@ app.whenReady().then(() => {
 ipcMain.handle('open-file', (_event, filePath: string) => {
   return fs.readFileSync(filePath, 'utf-8')
 })
+
+ipcMain.handle('get-arg-path', (): string | null => {
+  console.log(`argv: ${process.argv}`)
+  let args: string[] = []
+  if (is.dev) {
+    args = process.argv.slice(2)
+  } else {
+    args = process.argv.slice(1)
+  }
+  if (args.length > 0) {
+    const absPath = resolve(args[0])
+    if (fs.existsSync(absPath)) {
+      return absPath
+    } else {
+      return null
+    }
+  }
+  return null
+})
+
 
 // Quit when all windows are closed, except on macOS. There, it's common
 // for applications and their menu bar to stay active until the user quits

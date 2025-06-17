@@ -18,7 +18,7 @@ export type HomePathMap = Record<HomeType, string>
 
 export interface FolderAPI {
   getResourcesPath: () => string
-  getCurPath: () => Promise<string>
+  getArgPath: () => Promise<string | null>
   readFolder: (params: OptParams) => Promise<Folder>
   readTextFile: (pathStr: string) => Promise<TextContent>
   openFile: (pathStr: string) => Promise<string>
@@ -34,8 +34,9 @@ export interface FolderAPI {
 // Custom APIs for renderer
 const api: FolderAPI = {
   getResourcesPath: () => process.resourcesPath,
-  getCurPath: async (): Promise<string> => {
-    return await ipcRenderer.invoke('get-cur-path')
+  getArgPath: (): Promise<string | null> => {
+    // process.argv.slice(2)
+    return ipcRenderer.invoke('get-arg-path')
   },
   readFolder: async (params: OptParams): Promise<Folder> => {
     return new FolderApi().readFolder(JSON.stringify(params)).then(JSON.parse)
