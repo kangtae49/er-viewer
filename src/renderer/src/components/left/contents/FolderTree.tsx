@@ -42,7 +42,6 @@ function FolderTree(): React.ReactElement {
   }, [setAbsPath])
 
   useEffect(() => {
-    // console.log('useEffect', folderTreeRef, absPath)
     if (absPath) {
       fetchFolderTree({ fullPath: absPath }).then(([tree, item]) => {
         if (tree && item) {

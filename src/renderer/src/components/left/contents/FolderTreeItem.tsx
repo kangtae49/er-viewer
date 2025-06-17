@@ -1,7 +1,7 @@
 import React from 'react'
 import { TreeItem } from '@renderer/types'
 import { FontAwesomeIcon as Icon } from '@fortawesome/react-fontawesome'
-import { faFolder, faFile } from '@fortawesome/free-solid-svg-icons'
+import { faFolderPlus, faFile } from '@fortawesome/free-solid-svg-icons'
 import {
   selectTreeItem,
   getNthParent,
@@ -82,7 +82,7 @@ function FolderTreeItem({ treeItem, style }: Prop): React.ReactElement {
       })}
       <div className="nm" style={nm_style}>
         <div className="icon" style={icon_style} onClick={() => clickIcon(treeItem)}>
-          <Icon icon={treeItem.dir ? faFolder : faFile} />
+          <Icon icon={treeItem.dir ? faFolderPlus : faFile} />
         </div>
         <div
           className="label"

@@ -3,6 +3,7 @@ import { FileViewType, TreeItem } from '@renderer/types'
 import { ShadowDomWrapper } from '@renderer/components/right/contents/ShadowDomWrapper'
 import * as monaco from 'monaco-editor'
 import { formatFileSize } from '@renderer/components/utils'
+import {} from '@renderer/components/left/contents/tree'
 
 self.MonacoEnvironment = {
   getWorkerUrl(_, label) {
@@ -233,28 +234,18 @@ function ViewMonaco({ selectedItem }: FileViewProps): React.ReactElement {
         language: getLanguage(selectedItem?.ext),
         theme: 'vs',
         readOnly: true,
-        automaticLayout: true
+        automaticLayout: true,
+        scrollBeyondLastLine: false
       })
-      // editorRef.current.innerHTML = ''
-      // monacoEditorRef.current?.dispose()
-      // const model = monaco.editor.createModel(content, 'plaintext')
-      // const model = monaco.editor.createModel(content, getLanguage(selectedItem?.ext))
-      // return () => {
-      //   monacoEditorRef.current?.dispose()
-      //   // editorRef.current?.innerHTML = ''
-      // }
     }
-    // if (!content) {
-    //   return
-    // }
-    // if (!editorRef.current) {
-    //   return
-    // }
-    // (document.querySelector('.editor-container') as HTMLDivElement).innerHTML = ''
-    // monaco.editor.setModelLanguage(model, getLanguage(selectedItem?.ext))
   }, [content, selectedItem])
 
-  return <div className="view-monaco" ref={editorRef} style={{ width: '100%', height: '100%' }} />
+  return (
+    <div
+      className="view-monaco"
+      ref={editorRef}
+    />
+  )
 }
 
 function isMonacoFile(ext?: string): boolean {
