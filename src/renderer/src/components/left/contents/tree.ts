@@ -22,21 +22,6 @@ const treeParams: OptParams = {
   ]
 }
 
-export const selectTreeItem = ({
-  selectedItem,
-  newItem
-}: {
-  selectedItem?: TreeItem
-  newItem: TreeItem | undefined
-}): void => {
-  if (selectedItem) {
-    delete selectedItem?.selected
-  }
-  if (newItem) {
-    newItem.selected = true
-  }
-}
-
 const fromDisk = (disk: DiskInfo): TreeItem => {
   return {
     nm: disk.path.replaceAll(SEP, ''),
@@ -257,8 +242,7 @@ export const renderTreeFromPath = async ({
   fullPath,
   setFolderTree,
   folderTreeRef,
-  setSelectedItem,
-  selectedItem
+  setSelectedItem
 }: {
   fullPath: string
   setFolderTree: FolderTreeStore['setFolderTree']
@@ -274,7 +258,6 @@ export const renderTreeFromPath = async ({
     fetchFolderTree({ fullPath }).then(([newFolderTree, newSelectedItem]) => {
       if (newFolderTree && newSelectedItem) {
         setFolderTree([...newFolderTree])
-        selectTreeItem({ selectedItem, newItem: newSelectedItem })
         setSelectedItem(newSelectedItem)
         scrollToItem({ selectedItem: newSelectedItem, folderTree: newFolderTree, folderTreeRef })
       }

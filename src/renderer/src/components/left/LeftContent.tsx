@@ -4,7 +4,6 @@ import {
   getNth,
   getNthOfTreeItems,
   scrollToItem,
-  selectTreeItem,
   toggleDirectory
 } from '@renderer/components/left/contents/tree'
 import { useSelectedTreeItemStore } from '@renderer/store/selectedTreeItemStore'
@@ -25,20 +24,17 @@ function LeftContent(): React.ReactNode {
     if (e.key === 'ArrowDown') {
       const [newTreeItem] = getNthOfTreeItems(folderTree, nth + 1)
       if (newTreeItem) {
-        selectTreeItem({ selectedItem, newItem: newTreeItem })
         setSelectedItem(newTreeItem)
         await scrollToItem({ folderTree, selectedItem: newTreeItem, folderTreeRef })
       }
     } else if (e.key === 'ArrowUp') {
       const [newTreeItem] = getNthOfTreeItems(folderTree, nth - 1)
       if (newTreeItem) {
-        selectTreeItem({ selectedItem, newItem: newTreeItem })
         setSelectedItem(newTreeItem)
         await scrollToItem({ folderTree, selectedItem: newTreeItem, folderTreeRef })
       }
     } else if (e.key === 'ArrowLeft') {
       if (selectedItem.parent) {
-        selectTreeItem({ selectedItem, newItem: selectedItem.parent })
         setSelectedItem(selectedItem.parent)
         await scrollToItem({ folderTree, selectedItem: selectedItem.parent, folderTreeRef })
       }

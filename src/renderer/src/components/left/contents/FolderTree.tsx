@@ -8,7 +8,6 @@ import type { FolderTree } from '@renderer/types'
 import {
   fetchFolderTree,
   scrollToItem,
-  selectTreeItem,
   TREE_ITEM_SIZE
 } from '@renderer/components/left/contents/tree'
 import {
@@ -47,7 +46,6 @@ function FolderTree(): React.ReactElement {
       fetchFolderTree({ fullPath: absPath }).then(([tree, item]) => {
         if (tree && item) {
           setFolderTree([...tree])
-          selectTreeItem({ newItem: item })
           setSelectedItem({ ...item })
           scrollToItem({ selectedItem: item, folderTree: tree, folderTreeRef })
         }

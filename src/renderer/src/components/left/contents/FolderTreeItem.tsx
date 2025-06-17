@@ -3,7 +3,6 @@ import { TreeItem } from '@renderer/types'
 import { FontAwesomeIcon as Icon } from '@fortawesome/react-fontawesome'
 import { faFolderPlus, faFile } from '@fortawesome/free-solid-svg-icons'
 import {
-  selectTreeItem,
   getNthParent,
   SEP,
   TREE_DEPT_SIZE,
@@ -44,7 +43,6 @@ function FolderTreeItem({ treeItem, style }: Prop): React.ReactElement {
 
   const clickLabel = (newTreeItem?: TreeItem): void => {
     console.log('clickLabel', newTreeItem)
-    selectTreeItem({ selectedItem, newItem: newTreeItem })
     setSelectedItem(newTreeItem)
   }
 
