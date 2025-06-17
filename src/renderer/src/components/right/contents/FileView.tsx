@@ -3,7 +3,6 @@ import { FileViewType, TreeItem } from '@renderer/types'
 import { ShadowDomWrapper } from '@renderer/components/right/contents/ShadowDomWrapper'
 import * as monaco from 'monaco-editor'
 import { formatFileSize } from '@renderer/components/utils'
-import {} from '@renderer/components/left/contents/tree'
 
 self.MonacoEnvironment = {
   getWorkerUrl(_, label) {

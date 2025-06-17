@@ -7,7 +7,8 @@ import { useFolderTreeRefStore } from '@renderer/store/folderTreeRefStore'
 import type { FolderTree } from '@renderer/types'
 import {
   fetchFolderTree,
-  scrollToItem, selectTreeItem,
+  scrollToItem,
+  selectTreeItem,
   TREE_ITEM_SIZE
 } from '@renderer/components/left/contents/tree'
 import {

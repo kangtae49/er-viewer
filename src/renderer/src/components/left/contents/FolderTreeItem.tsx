@@ -6,7 +6,8 @@ import {
   selectTreeItem,
   getNthParent,
   SEP,
-  TREE_DEPT_SIZE, toggleDirectory
+  TREE_DEPT_SIZE,
+  toggleDirectory
 } from '@renderer/components/left/contents/tree'
 import { useFolderTreeStore } from '@renderer/store/folderTreeStore'
 import { useSelectedTreeItemStore } from '@renderer/store/selectedTreeItemStore'
