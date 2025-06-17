@@ -239,12 +239,7 @@ function ViewMonaco({ selectedItem }: FileViewProps): React.ReactElement {
     }
   }, [content, selectedItem])
 
-  return (
-    <div
-      className="view-monaco"
-      ref={editorRef}
-    />
-  )
+  return <div className="view-monaco" ref={editorRef} />
 }
 
 function isMonacoFile(ext?: string): boolean {
