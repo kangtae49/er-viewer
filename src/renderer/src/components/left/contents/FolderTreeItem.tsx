@@ -58,7 +58,7 @@ function FolderTreeItem({ treeItem, style }: Prop): React.ReactElement {
   })
   const iconWidth = 18
   const nm_minus = TREE_DEPT_SIZE * pathList.length + iconWidth
-  const classNameSelected = treeItem.selected ? 'selected' : ''
+  const classNameSelected = treeItem == selectedItem ? 'selected' : ''
   const icon_style = { flex: `0 0 ${iconWidth}px` }
   const nm_style = {
     width: `calc(100% - ${nm_minus}px)`

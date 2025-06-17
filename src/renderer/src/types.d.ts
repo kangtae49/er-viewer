@@ -13,7 +13,6 @@ export type TreeItem = {
   sz?: number
   tm?: number
   items?: TreeItem[]
-  selected?: boolean
 }
 export type DirectoryViewType = 'FolderList' | 'GalleryList'
 
